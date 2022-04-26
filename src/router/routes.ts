@@ -1,10 +1,29 @@
 import { RouteRecordRaw } from 'vue-router';
 
+const MainLayout = () => import('layouts/MainLayout.vue');
+const ProductsPage = () => import('pages/ProductsPage.vue');
+const ComponentsPage = () => import('src/pages/ComponentsPage.vue');
+const AboutPage = () => import('pages/AboutPage.vue');
+
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
+    component: MainLayout,
+    children: [
+      {
+        path: 'products',
+        component: ProductsPage,
+      },
+      {
+        path: 'components',
+        component: ComponentsPage,
+      },
+      {
+        path: 'about',
+        component: AboutPage,
+      },
+      // TODO: add /products/create, /products/details/{id}, components/details/{id} paths
+    ],
   },
 
   // Always leave this as last one,
