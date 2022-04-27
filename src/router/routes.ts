@@ -12,6 +12,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: 'products',
+        alias: '/',
         component: ProductsPage,
       },
       {

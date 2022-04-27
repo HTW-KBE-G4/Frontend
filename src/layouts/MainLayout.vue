@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh Lpr lff">
+  <q-layout view="hHh Lpr fFf">
     <q-header elevated>
       <q-toolbar class="shadow-2 rounded-borders text-center">
         <q-toolbar-title>
@@ -12,7 +12,7 @@
               class="bg-white text-dark q-mr-sm"
               round
               dense
-              :icon="$q.dark.isActive ? 'sunny' : 'nights_stay'"
+              :icon="$q.dark.isActive ? 'light_mode' : 'dark_mode'"
               @click="toggleDarkMode"
             />
             <q-btn-dropdown
@@ -40,8 +40,8 @@
     </q-header>
 
     <q-drawer
-      class="q-pa-md"
       bordered
+      class="q-pa-md"
       show-if-above
       :width="220"
       :breakpoint="500"
@@ -51,7 +51,7 @@
           v-for="item in menuItems"
           :key="item.path"
           v-bind="item"
-          @click="onSubMenuItemClick(item.path)"
+          @click="onMenuItemClick(item.path)"
         />
       </q-list>
       <q-separator />
@@ -65,6 +65,31 @@
       />
     </q-drawer>
 
+    <q-footer
+      bordered
+      class="absolute-bottom-left"
+      v-bind:style="
+        $q.dark.isActive ? { background: '#1d1d1d' } : { background: 'white' }
+      "
+    >
+      <q-tabs
+        no-caps
+        active-color="primary"
+        indicator-color="transparent"
+        class="text-grey"
+      >
+        <a class="q-ma-sm q-pt-sm q-pr-md" href="https://github.com/HTW-KBE-G4"
+          ><img src="/GitHub-Mark-32px.png"
+        /></a>
+        <a
+          class="text-grey"
+          href="https://www.flaticon.com/free-icons/raccoon"
+          title="raccoon icons"
+          >Raccoon icons created by Freepik - Flaticon</a
+        >
+      </q-tabs>
+    </q-footer>
+
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -74,7 +99,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { useRouter } from 'vue-router';
+//import { useRouter } from 'vue-router';
 import MenuItem from 'components/MenuItem.vue';
 
 const menuItemList = [
