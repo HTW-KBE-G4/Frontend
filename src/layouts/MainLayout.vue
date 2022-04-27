@@ -1,47 +1,50 @@
 <template>
   <q-layout view="hHh Lpr fFf">
     <q-header elevated>
-      <q-toolbar class="shadow-2 rounded-borders text-center">
-        <q-toolbar-title>
+      <q-toolbar class="shadow-2 rounded-borders">
+        <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
+        <q-space />
+        <q-toolbar-title class="absolute-center">
           <q-avatar size="65px" class="q-ma-xs q-mr-md">
             <img src="/favicon.ico" />
           </q-avatar>
           Tanuki Hardware Store
-          <div class="absolute-right">
-            <q-btn
-              class="bg-white text-dark q-mr-sm"
-              round
-              dense
-              :icon="$q.dark.isActive ? 'light_mode' : 'dark_mode'"
-              @click="toggleDarkMode"
-            />
-            <q-btn-dropdown
-              class="bg-white text-black q-ma-md"
-              text-primary
-              v-bind:label="selectedCurrency.name"
-            >
-              <q-list>
-                <q-item
-                  v-for="currency in currencies"
-                  :key="currency.name"
-                  v-bind="currency"
-                  clickable
-                  v-close-popup
-                  @click="selectCurrency(currency)"
-                >
-                  <q-item-section>{{ currency.name }}</q-item-section>
-                  <q-item-section side>{{ currency.symbol }}</q-item-section>
-                </q-item>
-              </q-list>
-            </q-btn-dropdown>
-          </div>
         </q-toolbar-title>
+        <q-space />
+        <div>
+          <q-btn
+            class="bg-white text-dark q-mr-md"
+            round
+            dense
+            :icon="$q.dark.isActive ? 'light_mode' : 'dark_mode'"
+            @click="toggleDarkMode"
+          />
+          <q-btn-dropdown
+            class="bg-white text-black q-mt-md q-mb-md"
+            text-primary
+            v-bind:label="selectedCurrency.name"
+          >
+            <q-list>
+              <q-item
+                v-for="currency in currencies"
+                :key="currency.name"
+                v-bind="currency"
+                clickable
+                v-close-popup
+                @click="selectCurrency(currency)"
+              >
+                <q-item-section>{{ currency.name }}</q-item-section>
+                <q-item-section side>{{ currency.symbol }}</q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown>
+        </div>
       </q-toolbar>
     </q-header>
-
     <q-drawer
-      bordered
+      v-model="drawer"
       class="q-pa-md"
+      elevated
       show-if-above
       :width="220"
       :breakpoint="500"
@@ -64,32 +67,33 @@
         @click="logout"
       />
     </q-drawer>
-
     <q-footer
       bordered
-      class="absolute-bottom-left"
       v-bind:style="
         $q.dark.isActive ? { background: '#1d1d1d' } : { background: 'white' }
       "
     >
-      <q-tabs
-        no-caps
-        active-color="primary"
-        indicator-color="transparent"
-        class="text-grey"
-      >
-        <a class="q-ma-sm q-pt-sm q-pr-md" href="https://github.com/HTW-KBE-G4"
-          ><img src="/GitHub-Mark-32px.png"
-        /></a>
+      <q-tabs no-caps>
+        <a class="q-ma-sm q-pr-md" href="https://github.com/HTW-KBE-G4">
+          <q-avatar
+            size="32px"
+            v-bind:style="
+              $q.dark.isActive
+                ? { filter: 'invert(100%)' }
+                : { filter: 'brightness(100%)' }
+            "
+          >
+            <img src="/GitHub-Mark-32px.png" bg-white />
+          </q-avatar>
+        </a>
         <a
-          class="text-grey"
+          class="text-grey text-subtitle2"
           href="https://www.flaticon.com/free-icons/raccoon"
           title="raccoon icons"
           >Raccoon icons created by Freepik - Flaticon</a
         >
       </q-tabs>
     </q-footer>
-
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -120,7 +124,7 @@ const menuItemList = [
   },
 ];
 
-// Mock list
+// Hardcoded list for now
 const currencyList = [
   {
     name: 'EUR',
@@ -159,6 +163,7 @@ export default defineComponent({
     },
 
     toggleDarkMode() {
+      // TODO: localStorage
       // $q.dark.isActive();
       this.$q.dark.toggle();
     },
@@ -172,6 +177,7 @@ export default defineComponent({
     //router.push('/products');
 
     return {
+      drawer: ref(false),
       menuItems: menuItemList,
       currencies: currencyList,
       selectedCurrency: ref({
