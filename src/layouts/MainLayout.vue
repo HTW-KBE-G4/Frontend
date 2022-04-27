@@ -59,7 +59,7 @@
       </q-list>
       <q-separator />
       <q-btn
-        class="absolute-bottom-left q-ma-md"
+        class="q-ma-md absolute-bottom-left"
         icon="logout"
         rounded
         color="negative"

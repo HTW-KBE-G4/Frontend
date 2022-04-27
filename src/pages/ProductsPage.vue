@@ -1,49 +1,74 @@
 <template>
-  <q-page class="row items-center justify-evenly">
-    <example-component
-      title="Example component"
-      active
-      :todos="todos"
-      :meta="meta"
-    ></example-component>
+  <q-page>
+    <div class="q-ma-sm q-gutter-md row">
+      <ProductCard
+        v-for="product in products"
+        :key="product.name"
+        v-bind="product"
+      ></ProductCard>
+      <q-card class="create-card no-box-shadow">
+        <q-card-section class="text-center">
+          <q-btn flat round class="create-button" @click="createProduct">
+            <q-icon color="grey" size="3em" name="control_point" />
+          </q-btn>
+        </q-card-section>
+      </q-card>
+    </div>
   </q-page>
 </template>
 
 <script lang="ts">
-import { Todo, Meta } from 'components/models';
-import ExampleComponent from 'components/ExampleComponent.vue';
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
+import ProductCard from 'components/ProductCard.vue';
+
+const productList = [
+  {
+    name: 'Extrem aktueller und cooler PC .. . .. .TEST OVERFLOW AHHHHHHHHHHHHHHHH AHHHHHHHHHHHHHHHH',
+    price: '114,99 €',
+    image:
+      'https://cdn.pixabay.com/photo/2013/07/12/18/58/computer-154114_960_720.png',
+  },
+  {
+    name: 'Drucker  PC',
+    price: '78,49 €',
+    image:
+      'https://cdn.pixabay.com/photo/2013/07/13/12/10/print-159336_960_720.png',
+  },
+  {
+    name: 'Microsoft PC',
+    price: '9282,00 €',
+    image:
+      'https://cdn.pixabay.com/photo/2017/04/04/18/07/video-game-console-2202570_960_720.jpg',
+  },
+];
 
 export default defineComponent({
-  name: 'IndexPage',
-  components: { ExampleComponent },
+  name: 'ProductsPage',
+  components: { ProductCard },
+
+  methods: {
+    createProduct() {
+      //this.$router.push(create...);
+      console.log('Creating a product');
+    },
+  },
+
   setup() {
-    const todos = ref<Todo[]>([
-      {
-        id: 1,
-        content: 'ct1',
-      },
-      {
-        id: 2,
-        content: 'ct2',
-      },
-      {
-        id: 3,
-        content: 'ct3',
-      },
-      {
-        id: 4,
-        content: 'ct4',
-      },
-      {
-        id: 5,
-        content: 'ct5',
-      },
-    ]);
-    const meta = ref<Meta>({
-      totalCount: 1200,
-    });
-    return { todos, meta };
+    return { products: productList };
   },
 });
 </script>
+
+<style lang="scss">
+.create-card {
+  opacity: 0.3;
+  outline-color: grey;
+  outline-style: dashed;
+  width: 200px;
+  height: 350px;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>
