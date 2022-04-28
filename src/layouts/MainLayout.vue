@@ -3,44 +3,43 @@
     <q-header elevated>
       <q-toolbar class="shadow-2 rounded-borders">
         <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
-        <q-space />
-        <q-toolbar-title class="absolute-center">
+
+        <q-toolbar-title class="text-center">
           <q-avatar size="65px" class="q-ma-xs q-mr-md">
             <img src="/favicon.ico" />
           </q-avatar>
           Tanuki Hardware Store
         </q-toolbar-title>
-        <q-space />
-        <div>
-          <q-btn
-            class="bg-white text-dark q-mr-md"
-            round
-            dense
-            :icon="$q.dark.isActive ? 'light_mode' : 'dark_mode'"
-            @click="toggleDarkMode"
-          />
-          <q-btn-dropdown
-            class="bg-white text-black q-mt-md q-mb-md"
-            text-primary
-            v-bind:label="selectedCurrency.name"
-          >
-            <q-list>
-              <q-item
-                v-for="currency in currencies"
-                :key="currency.name"
-                v-bind="currency"
-                clickable
-                v-close-popup
-                @click="selectCurrency(currency)"
-              >
-                <q-item-section>{{ currency.name }}</q-item-section>
-                <q-item-section side>{{ currency.symbol }}</q-item-section>
-              </q-item>
-            </q-list>
-          </q-btn-dropdown>
-        </div>
+
+        <q-btn
+          class="bg-white text-dark q-mr-md"
+          round
+          dense
+          :icon="$q.dark.isActive ? 'light_mode' : 'dark_mode'"
+          @click="toggleDarkMode"
+        />
+        <q-btn-dropdown
+          class="bg-white text-black q-ma-sm"
+          text-primary
+          v-bind:label="selectedCurrency.name"
+        >
+          <q-list>
+            <q-item
+              v-for="currency in currencies"
+              :key="currency.name"
+              v-bind="currency"
+              clickable
+              v-close-popup
+              @click="selectCurrency(currency)"
+            >
+              <q-item-section>{{ currency.name }}</q-item-section>
+              <q-item-section side>{{ currency.symbol }}</q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
       </q-toolbar>
     </q-header>
+
     <q-drawer
       v-model="drawer"
       class="q-pa-md"
@@ -67,6 +66,7 @@
         @click="logout"
       />
     </q-drawer>
+
     <q-footer
       bordered
       v-bind:style="
@@ -188,3 +188,19 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss">
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $selected;
+  width: 1px;
+  border-radius: 10ex;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: $primary;
+}
+</style>
