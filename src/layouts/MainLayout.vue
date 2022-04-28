@@ -1,116 +1,206 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="hHh Lpr fFf">
     <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+      <q-toolbar class="shadow-2 rounded-borders">
+        <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
 
-        <q-toolbar-title>
-          Quasar App
+        <q-toolbar-title class="text-center">
+          <q-avatar size="65px" class="q-ma-xs q-mr-md">
+            <img src="/favicon.ico" />
+          </q-avatar>
+          Tanuki Hardware Store
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <q-btn
+          class="bg-white text-dark q-mr-md"
+          round
+          dense
+          :icon="$q.dark.isActive ? 'light_mode' : 'dark_mode'"
+          @click="toggleDarkMode"
+        />
+        <q-btn-dropdown
+          class="bg-white text-black q-ma-sm"
+          text-primary
+          v-bind:label="selectedCurrency.name"
+        >
+          <q-list>
+            <q-item
+              v-for="currency in currencies"
+              :key="currency.name"
+              v-bind="currency"
+              clickable
+              v-close-popup
+              @click="selectCurrency(currency)"
+            >
+              <q-item-section>{{ currency.name }}</q-item-section>
+              <q-item-section side>{{ currency.symbol }}</q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
       </q-toolbar>
     </q-header>
 
     <q-drawer
-      v-model="leftDrawerOpen"
+      v-model="drawer"
+      class="q-pa-md"
+      elevated
       show-if-above
-      bordered
+      :width="220"
+      :breakpoint="500"
     >
       <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
+        <MenuItem
+          v-for="item in menuItems"
+          :key="item.path"
+          v-bind="item"
+          @click="onMenuItemClick(item.path)"
         />
       </q-list>
+      <q-separator />
+      <q-btn
+        class="q-ma-md absolute-bottom-left"
+        icon="logout"
+        rounded
+        color="negative"
+        label="Logout"
+        @click="logout"
+      />
     </q-drawer>
 
+    <q-footer
+      bordered
+      v-bind:style="
+        $q.dark.isActive ? { background: '#1d1d1d' } : { background: 'white' }
+      "
+    >
+      <q-tabs no-caps>
+        <a class="q-ma-sm q-pr-md" href="https://github.com/HTW-KBE-G4">
+          <q-avatar
+            size="32px"
+            v-bind:style="
+              $q.dark.isActive
+                ? { filter: 'invert(100%)' }
+                : { filter: 'brightness(100%)' }
+            "
+          >
+            <img src="/GitHub-Mark-32px.png" bg-white />
+          </q-avatar>
+        </a>
+        <a
+          class="text-grey text-subtitle2"
+          href="https://www.flaticon.com/free-icons/raccoon"
+          title="raccoon icons"
+          >Raccoon icons created by Freepik - Flaticon</a
+        >
+      </q-tabs>
+    </q-footer>
     <q-page-container>
       <router-view />
     </q-page-container>
   </q-layout>
+  <router-view name="dialog" />
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import EssentialLink from 'components/EssentialLink.vue';
+//import { useRouter } from 'vue-router';
+import MenuItem from 'components/MenuItem.vue';
 
-const linksList = [
+const menuItemList = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
+    title: 'Products',
+    icon: 'shopping_cart',
+    path: 'products',
   },
   {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
+    title: 'Components',
+    icon: 'memory',
+    path: 'components',
   },
   {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
+    title: 'About',
+    icon: 'groups',
+    path: 'about',
+  },
+];
+
+// Hardcoded list for now
+const currencyList = [
+  {
+    name: 'EUR',
+    symbol: '€',
   },
   {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
+    name: 'USD',
+    symbol: '$',
   },
   {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
+    name: 'YEN',
+    symbol: '¥',
   },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
 ];
 
 export default defineComponent({
   name: 'MainLayout',
 
-  components: {
-    EssentialLink
+  components: { MenuItem },
+
+  methods: {
+    onMenuItemClick(path: string) {
+      this.$router.push(path);
+      console.log('Switched to path: ' + path);
+    },
+
+    selectCurrency(currency: { name: string; symbol: string }) {
+      this.selectedCurrency = currency;
+      console.log('Currency set to ' + currency.name);
+    },
+
+    logout() {
+      //void router.push(/); ?
+      //keycloak.logout;
+      console.log('Logged out');
+    },
+
+    toggleDarkMode() {
+      // TODO: localStorage
+      // $q.dark.isActive();
+      this.$q.dark.toggle();
+    },
   },
 
-  setup () {
-    const leftDrawerOpen = ref(false)
+  setup() {
+    //TODO: fill currencyList by getting String Array (?) of available currencies from backend
+
+    //TODO: Wait for product page to load and then do something like .. mabye
+    //const router = useRouter();
+    //router.push('/products');
 
     return {
-      essentialLinks: linksList,
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
-    }
-  }
+      drawer: ref(false),
+      menuItems: menuItemList,
+      currencies: currencyList,
+      selectedCurrency: ref({
+        name: 'EUR',
+        symbol: '€',
+      }),
+    };
+  },
 });
 </script>
+
+<style lang="scss">
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $selected;
+  width: 1px;
+  border-radius: 10ex;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: $primary;
+}
+</style>
