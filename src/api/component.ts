@@ -1,5 +1,3 @@
-import { defineStore } from 'pinia';
-
 export interface Component {
   id: number;
   type: string;
@@ -13,13 +11,3 @@ export interface Component {
   ean: string;
   imageURL: string;
 }
-
-export const useComponentStore = defineStore('components', {
-  state: () => ({
-    components: <Component[]>[],
-  }),
-
-  getters: {},
-
-  actions: {},
-});
