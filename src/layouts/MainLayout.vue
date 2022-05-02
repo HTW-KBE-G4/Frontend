@@ -21,19 +21,17 @@
         <q-btn-dropdown
           class="bg-white text-black q-ma-sm"
           text-primary
-          v-bind:label="selectedCurrency.name"
+          v-bind:label="selectedCurrency"
         >
           <q-list>
             <q-item
               v-for="currency in currencies"
-              :key="currency.name"
-              v-bind="currency"
+              :key="currency.at"
               clickable
               v-close-popup
               @click="selectCurrency(currency)"
             >
-              <q-item-section>{{ currency.name }}</q-item-section>
-              <q-item-section side>{{ currency.symbol }}</q-item-section>
+              <q-item-section>{{ currency }}</q-item-section>
             </q-item>
           </q-list>
         </q-btn-dropdown>
@@ -105,6 +103,9 @@
 import { defineComponent, ref } from 'vue';
 //import { useRouter } from 'vue-router';
 import MenuItem from 'components/MenuItem.vue';
+import { currencyApi } from 'src/api/currency';
+import { Notify } from 'quasar';
+import ProductsPageVue from 'src/pages/ProductsPage.vue';
 
 const menuItemList = [
   {
@@ -124,21 +125,7 @@ const menuItemList = [
   },
 ];
 
-// Hardcoded list for now
-const currencyList = [
-  {
-    name: 'EUR',
-    symbol: '€',
-  },
-  {
-    name: 'USD',
-    symbol: '$',
-  },
-  {
-    name: 'YEN',
-    symbol: '¥',
-  },
-];
+const currencyList = ref<string[]>([]);
 
 export default defineComponent({
   name: 'MainLayout',
@@ -151,9 +138,9 @@ export default defineComponent({
       console.log('Switched to path: ' + path);
     },
 
-    selectCurrency(currency: { name: string; symbol: string }) {
+    selectCurrency(currency: string) {
       this.selectedCurrency = currency;
-      console.log('Currency set to ' + currency.name);
+      console.log('Currency set to ' + currency);
     },
 
     logout() {
@@ -169,21 +156,24 @@ export default defineComponent({
     },
   },
 
-  setup() {
+  async setup() {
     //TODO: fill currencyList by getting String Array (?) of available currencies from backend
-
-    //TODO: Wait for product page to load and then do something like .. mabye
-    //const router = useRouter();
-    //router.push('/products');
+    try {
+      currencyList.value = await currencyApi.getAll();
+    } catch (error) {
+      Notify.create({
+        type: 'info',
+        message:
+          'Available currencies could not be fetched. Predefining currencies...',
+      });
+      currencyList.value = ['USD', 'GBP', 'SEK', 'EUR', 'JPY'];
+    }
 
     return {
       drawer: ref(false),
       menuItems: menuItemList,
       currencies: currencyList,
-      selectedCurrency: ref({
-        name: 'EUR',
-        symbol: '€',
-      }),
+      selectedCurrency: ref('EUR'),
     };
   },
 });

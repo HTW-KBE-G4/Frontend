@@ -1,37 +1,29 @@
 <template>
   <q-card class="product-card">
-    <q-img no-spinner width="22vh" height="22vh" :src="image" />
+    <q-img no-spinner width="22vh" height="22vh" :src="product.imageUrl" />
 
     <q-card-section
       class="product-name row justify-center items-center text-center"
-      >{{ name }}</q-card-section
+      >{{ product.name }}</q-card-section
     >
 
     <q-separator />
     <q-card-section class="product-price q-pt-sm text-positive"
-      >{{ price }}
+      >{{ product.price }}
     </q-card-section>
   </q-card>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { Product } from 'src/api/product';
+import { defineComponent, PropType } from 'vue';
 
 export default defineComponent({
   name: 'ProductCard',
-  // Hardcoded (will be changed later) -> TODO: Interfaces
   props: {
-    name: {
-      type: String,
+    product: {
+      type: Object as PropType<Product>,
       required: true,
-    },
-    price: {
-      type: String,
-      default: '',
-    },
-    image: {
-      type: String,
-      default: '',
     },
   },
 });

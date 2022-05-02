@@ -2,9 +2,11 @@
   <q-page>
     <div class="q-ma-sm q-gutter-md row">
       <ProductCard
+        :product="product"
         v-for="product in products"
-        :key="product.name"
+        :key="product.id"
         v-bind="product"
+        @click="showDetails(product.id)"
       ></ProductCard>
       <q-card class="create-card row justify-center items-center no-box-shadow">
         <q-card-section class="text-center">
@@ -18,29 +20,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import ProductCard from 'components/ProductCard.vue';
+import { Product, productApi } from 'src/api/product';
+import { Notify } from 'quasar';
 
-const productList = [
-  {
-    name: 'Extrem aktueller und cooler PC .. . .. .TEST OVERFLOW AHHHHHHHHHHHHHHHH AHHHHHHHHHHHHHHHH TEST TEST TEST',
-    price: '114,99 €',
-    image:
-      'https://cdn.pixabay.com/photo/2013/07/12/18/58/computer-154114_960_720.png',
-  },
-  {
-    name: 'Drucker  PC (+Exklusives Tinten-Abo für nur 39€/m)',
-    price: '78,49 €',
-    image:
-      'https://cdn.pixabay.com/photo/2013/07/13/12/10/print-159336_960_720.png',
-  },
-  {
-    name: 'Microsoft PC',
-    price: '999999999992,00 €',
-    image:
-      'https://cdn.pixabay.com/photo/2017/04/04/18/07/video-game-console-2202570_960_720.jpg',
-  },
-];
+const productList = ref<Product[]>([]);
 
 export default defineComponent({
   name: 'ProductsPage',
@@ -51,9 +36,22 @@ export default defineComponent({
       //this.$router.push(create...);
       console.log('Creating a product');
     },
+    showDetails(id: number) {
+      //TODO: this.$router.push(`/products/${id.toString()}`)
+      console.log('Showing details of product with the ID ' + id);
+    },
   },
 
-  setup() {
+  async setup() {
+    // Call in main scripts body to only load once?
+    try {
+      productList.value = await productApi.getAll();
+    } catch (error) {
+      Notify.create({
+        type: 'negative',
+        message: 'Products could not be fetched',
+      });
+    }
     return { products: productList };
   },
 });
