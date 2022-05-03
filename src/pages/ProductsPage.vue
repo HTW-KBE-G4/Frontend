@@ -8,9 +8,12 @@
         v-bind="product"
         @click="showDetails(product.id)"
       ></ProductCard>
-      <q-card class="create-card row justify-center items-center no-box-shadow">
+      <q-card
+        @currency-change="createProduct"
+        class="create-card row justify-center items-center no-box-shadow"
+      >
         <q-card-section class="text-center">
-          <q-btn flat round class="create-button" @click="createProduct">
+          <q-btn flat round class="create-button" @click="createProduct()">
             <q-icon color="grey" size="4em" name="control_point" />
           </q-btn>
         </q-card-section>
@@ -24,8 +27,22 @@ import { defineComponent, ref } from 'vue';
 import ProductCard from 'components/ProductCard.vue';
 import { Product, productApi } from 'src/api/product';
 import { Notify } from 'quasar';
+import { useCurrencyStore } from 'src/stores/currency';
 
+const currencyStore = useCurrencyStore();
 const productList = ref<Product[]>([]);
+
+async function loadProducts(currency: string) {
+  try {
+    productList.value = await productApi.getAll(currency);
+  } catch (error) {
+    Notify.create({
+      type: 'negative',
+      message: 'Products could not be fetched',
+    });
+  }
+  return { products: productList };
+}
 
 export default defineComponent({
   name: 'ProductsPage',
@@ -37,21 +54,18 @@ export default defineComponent({
       console.log('Creating a product');
     },
     showDetails(id: number) {
-      //TODO: this.$router.push(`/products/${id.toString()}`)
+      //this.$router.push(`/products/${id.toString()}`)
       console.log('Showing details of product with the ID ' + id);
     },
   },
 
   async setup() {
-    // Call in main scripts body to only load once?
-    try {
-      productList.value = await productApi.getAll();
-    } catch (error) {
-      Notify.create({
-        type: 'negative',
-        message: 'Products could not be fetched',
-      });
-    }
+    currencyStore.$subscribe((_mutation, state) => {
+      loadProducts(state.currency);
+    });
+
+    loadProducts(currencyStore.currency);
+
     return { products: productList };
   },
 });

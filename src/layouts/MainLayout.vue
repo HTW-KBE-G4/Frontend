@@ -101,11 +101,8 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-//import { useRouter } from 'vue-router';
+import { useCurrencyStore } from 'stores/currency';
 import MenuItem from 'components/MenuItem.vue';
-import { currencyApi } from 'src/api/currency';
-import { Notify } from 'quasar';
-import ProductsPageVue from 'src/pages/ProductsPage.vue';
 
 const menuItemList = [
   {
@@ -125,6 +122,7 @@ const menuItemList = [
   },
 ];
 
+const currencyStore = useCurrencyStore();
 const currencyList = ref<string[]>([]);
 
 export default defineComponent({
@@ -139,8 +137,8 @@ export default defineComponent({
     },
 
     selectCurrency(currency: string) {
-      this.selectedCurrency = currency;
-      console.log('Currency set to ' + currency);
+      currencyStore.change(currency);
+      this.selectedCurrency = currencyStore.currency;
     },
 
     logout() {
@@ -157,23 +155,13 @@ export default defineComponent({
   },
 
   async setup() {
-    //TODO: fill currencyList by getting String Array (?) of available currencies from backend
-    try {
-      currencyList.value = await currencyApi.getAll();
-    } catch (error) {
-      Notify.create({
-        type: 'info',
-        message:
-          'Available currencies could not be fetched. Predefining currencies...',
-      });
-      currencyList.value = ['USD', 'GBP', 'SEK', 'EUR', 'JPY'];
-    }
+    currencyList.value = await currencyStore.getAll();
 
     return {
       drawer: ref(false),
       menuItems: menuItemList,
       currencies: currencyList,
-      selectedCurrency: ref('EUR'),
+      selectedCurrency: ref(currencyStore.currency),
     };
   },
 });
