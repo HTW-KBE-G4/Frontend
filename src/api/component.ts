@@ -7,11 +7,11 @@ export interface Component {
   description: string;
   manufacturer: string;
   releaseDate: string;
-  uvp: string;
+  uvp: number;
   weight: string;
   productName: string;
   ean: string;
-  imageURL: string;
+  imageUrl: string;
 }
 
 export const componentApi = {
