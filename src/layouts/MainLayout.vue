@@ -101,8 +101,9 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { useCurrencyStore } from 'stores/currency';
+import { useQuasar } from 'quasar';
 import MenuItem from 'components/MenuItem.vue';
+import { useCurrencyStore } from 'stores/currency';
 
 const menuItemList = [
   {
@@ -133,7 +134,6 @@ export default defineComponent({
   methods: {
     onMenuItemClick(path: string) {
       this.$router.push(path);
-      console.log('Switched to path: ' + path);
     },
 
     selectCurrency(currency: string) {
@@ -148,14 +148,20 @@ export default defineComponent({
     },
 
     toggleDarkMode() {
-      // TODO: localStorage
-      // $q.dark.isActive();
       this.$q.dark.toggle();
+      localStorage.setItem('darkMode', this.$q.dark.isActive.toString());
     },
   },
 
   async setup() {
+    const $q = useQuasar();
+
     currencyList.value = await currencyStore.getAll();
+
+    const setMode = localStorage.getItem('darkMode');
+    if (setMode) {
+      $q.dark.set(setMode === 'true' ? true : false);
+    }
 
     return {
       drawer: ref(false),
