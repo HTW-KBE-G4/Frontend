@@ -140,6 +140,7 @@ export default defineComponent({
     selectCurrency(currency: string) {
       currencyStore.change(currency);
       this.selectedCurrency = currencyStore.currency;
+      localStorage.setItem('currency', this.selectedCurrency);
     },
 
     logout() {
@@ -158,9 +159,14 @@ export default defineComponent({
 
     currencyList.value = await currencyStore.getAll();
 
-    const setMode = localStorage.getItem('darkMode');
-    if (setMode) {
-      $q.dark.set(setMode === 'true' ? true : false);
+    const savedMode = localStorage.getItem('darkMode');
+    if (savedMode) {
+      $q.dark.set(savedMode === 'true' ? true : false);
+    }
+
+    const savedCurrency = localStorage.getItem('currency');
+    if (savedCurrency) {
+      currencyStore.change(savedCurrency);
     }
 
     return {
