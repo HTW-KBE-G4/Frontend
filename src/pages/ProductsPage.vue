@@ -11,6 +11,9 @@
         :price="product.price"
         @click="showDetails(product.id)"
       ></GeneralCard>
+      <div v-if="loading" class="text-subtitle1">
+        <q-spinner-ball color="primary" size="2em" />
+      </div>
       <q-card class="create-card row justify-center items-center no-box-shadow">
         <q-card-section class="text-center">
           <q-btn flat round class="create-button" @click="createProduct()">
@@ -32,6 +35,7 @@ import { useCurrencyStore } from 'src/stores/currency';
 
 const currencyStore = useCurrencyStore();
 const productList = ref<Product[]>([]);
+const isLoading = ref<boolean>(true);
 
 async function loadProducts(currency: string) {
   try {
@@ -42,6 +46,7 @@ async function loadProducts(currency: string) {
       message: 'Products could not be fetched',
     });
   }
+  isLoading.value = false;
   return { products: productList };
 }
 
@@ -67,7 +72,7 @@ export default defineComponent({
       loadProducts(state.currency);
     });
 
-    return { products: productList };
+    return { products: productList, loading: isLoading };
   },
 });
 </script>

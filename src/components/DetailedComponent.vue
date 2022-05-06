@@ -9,7 +9,7 @@
         <q-btn dense flat icon="arrow_back" @click="$router.back()" />
       </q-toolbar>
       <q-card-section>
-        <q-img no-spinner width="100%" :src="component.imageUrl"></q-img>
+        <q-img no-spinner width="50vh" :src="component.imageUrl"></q-img>
       </q-card-section>
       <q-card-section>
         <div class="text-h6">
@@ -81,7 +81,7 @@ export default defineComponent({
         type: 'negative',
         message: 'Component could not be loaded or does not exist',
       });
-      router.back();
+      router.push('/components');
     }
 
     return {

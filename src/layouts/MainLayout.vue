@@ -22,7 +22,7 @@
         <q-btn-dropdown
           class="bg-white text-black q-ma-sm"
           text-primary
-          v-bind:label="selectedCurrency"
+          v-bind:label="currency"
         >
           <q-list>
             <q-item
@@ -139,8 +139,8 @@ export default defineComponent({
 
     selectCurrency(currency: string) {
       currencyStore.change(currency);
-      this.selectedCurrency = currencyStore.currency;
-      localStorage.setItem('currency', this.selectedCurrency);
+      this.currency = currencyStore.currency;
+      localStorage.setItem('currency', this.currency);
     },
 
     logout() {
@@ -168,12 +168,13 @@ export default defineComponent({
     if (savedCurrency) {
       currencyStore.change(savedCurrency);
     }
+    let currency = ref(currencyStore.currency);
 
     return {
       drawer: ref(false),
       menuItems: menuItemList,
       currencies: currencyList,
-      selectedCurrency: ref(currencyStore.currency),
+      currency,
     };
   },
 });

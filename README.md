@@ -8,6 +8,12 @@ A Hardware Store Simulation
 npm install
 ```
 
+### Create an .env file and change the API variable to your desired API endpoint
+
+```bash
+See .env.example
+```
+
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
 
 ```bash

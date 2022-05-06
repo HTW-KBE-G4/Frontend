@@ -11,8 +11,8 @@
         :price="component.uvp"
         @click="showDetails(component.id)"
       ></GeneralCard>
-      <div v-if="components.length === 0" class="text-subtitle1">
-        No Components available 😥
+      <div v-if="loading" class="text-subtitle1">
+        <q-spinner-ball color="primary" size="2em" />
       </div>
     </div>
   </q-page>
@@ -28,6 +28,7 @@ import { useCurrencyStore } from 'src/stores/currency';
 
 const currencyStore = useCurrencyStore();
 const componentList = ref<Component[]>([]);
+const isLoading = ref<boolean>(true);
 
 async function loadComponents(currency: string) {
   try {
@@ -38,6 +39,7 @@ async function loadComponents(currency: string) {
       message: 'Components could not be fetched',
     });
   }
+  isLoading.value = false;
   return { products: componentList };
 }
 
@@ -58,7 +60,7 @@ export default defineComponent({
       loadComponents(state.currency);
     });
 
-    return { components: componentList };
+    return { components: componentList, loading: isLoading };
   },
 });
 </script>

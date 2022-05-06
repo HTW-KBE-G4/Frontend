@@ -57,7 +57,7 @@ export default defineComponent({
         type: 'negative',
         message: 'Product could not be loaded or does not exist',
       });
-      router.back();
+      router.push('/products');
     }
 
     return {

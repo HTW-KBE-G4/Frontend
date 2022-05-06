@@ -1,6 +1,4 @@
 import { defineStore } from 'pinia';
-import { Notify } from 'quasar';
-import { api } from 'src/boot/axios';
 
 export const predefinedCurrencies = ['USD', 'GBP', 'SEK', 'EUR', 'JPY'];
 
@@ -17,7 +15,7 @@ export const useCurrencyStore = defineStore('currency', {
     },
 
     getAll: async (): Promise<string[]> => {
-      try {
+      /*try {
         const response = await api.get<string[]>('currencies');
         return response.data;
       } catch (error) {
@@ -26,8 +24,9 @@ export const useCurrencyStore = defineStore('currency', {
           message:
             'Available currencies could not be fetched. Predefining currencies...',
         });
-        return predefinedCurrencies;
-      }
+        
+      }*/
+      return predefinedCurrencies;
     },
   },
 });

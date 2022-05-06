@@ -17,7 +17,6 @@ import { useCurrencyStore } from 'src/stores/currency';
 import { defineComponent, ref } from 'vue';
 
 const currencyStore = useCurrencyStore();
-const updatableCurrency = ref<string>(currencyStore.currency);
 
 export default defineComponent({
   name: 'GeneralCard',
@@ -37,6 +36,7 @@ export default defineComponent({
   },
 
   setup() {
+    const updatableCurrency = ref(currencyStore.currency);
     currencyStore.$subscribe((_mutation, state) => {
       updatableCurrency.value = state.currency;
     });
