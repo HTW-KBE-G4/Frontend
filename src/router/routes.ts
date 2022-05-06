@@ -4,6 +4,8 @@ const MainLayout = () => import('layouts/MainLayout.vue');
 const ProductsPage = () => import('pages/ProductsPage.vue');
 const ComponentsPage = () => import('src/pages/ComponentsPage.vue');
 const AboutPage = () => import('pages/AboutPage.vue');
+const DetailedProduct = () => import('components/DetailedProduct.vue');
+const DetailedComponent = () => import('components/DetailedComponent.vue');
 
 const routes: RouteRecordRaw[] = [
   {
@@ -14,22 +16,35 @@ const routes: RouteRecordRaw[] = [
         path: 'products',
         alias: '/',
         component: ProductsPage,
-        /*children: [
+        children: [
           {
-            path: 'id',
-            component: DetailedProductView,
+            path: ':id',
+            component: DetailedProduct,
+            children: [
+              {
+                path: 'components/:component_id',
+                component: DetailedComponent,
+              },
+            ],
           },
-        ]*/
+        ],
       },
       {
         path: 'components',
         component: ComponentsPage,
+        children: [
+          {
+            path: ':id',
+            component: DetailedComponent,
+          },
+        ],
       },
       {
         path: 'about',
         component: AboutPage,
       },
-      // TODO: add /products/create, /products/details/{id}, components/details/{id} paths
+
+      //add /products/create
     ],
   },
 

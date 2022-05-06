@@ -1,21 +1,23 @@
 <template>
-  <q-card class="general-card">
+  <q-card class="general-card" square>
     <q-img no-spinner width="22vh" height="22vh" :src="imageUrl" />
-
     <q-card-section
       class="general-name row justify-center items-center text-center"
       >{{ name }}</q-card-section
     >
-
     <q-separator />
     <q-card-section class="general-price q-pt-sm text-positive"
-      >{{ price }}
+      >{{ price }} {{ currency }}
     </q-card-section>
   </q-card>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { useCurrencyStore } from 'src/stores/currency';
+import { defineComponent, ref } from 'vue';
+
+const currencyStore = useCurrencyStore();
+const updatableCurrency = ref<string>(currencyStore.currency);
 
 export default defineComponent({
   name: 'GeneralCard',
@@ -33,12 +35,20 @@ export default defineComponent({
       required: true,
     },
   },
+
+  setup() {
+    currencyStore.$subscribe((_mutation, state) => {
+      updatableCurrency.value = state.currency;
+    });
+    return {
+      currency: updatableCurrency,
+    };
+  },
 });
 </script>
 
 <style lang="scss">
 .general-card {
-  width: 100%;
   max-width: 22vh;
   max-height: 38vh;
 }
@@ -52,7 +62,7 @@ export default defineComponent({
 .general-price {
   text-align: right;
   padding: 1.5vh;
-  font-size: 2vh;
+  font-size: 1.8vh;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: pre;

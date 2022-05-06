@@ -18,6 +18,7 @@
           :icon="$q.dark.isActive ? 'light_mode' : 'dark_mode'"
           @click="toggleDarkMode"
         />
+
         <q-btn-dropdown
           class="bg-white text-black q-ma-sm"
           text-primary
@@ -109,17 +110,17 @@ const menuItemList = [
   {
     title: 'Products',
     icon: 'shopping_cart',
-    path: 'products',
+    path: '/products',
   },
   {
     title: 'Components',
     icon: 'memory',
-    path: 'components',
+    path: '/components',
   },
   {
     title: 'About',
     icon: 'groups',
-    path: 'about',
+    path: '/about',
   },
 ];
 
@@ -142,7 +143,6 @@ export default defineComponent({
     },
 
     logout() {
-      //void router.push(/); ?
       //keycloak.logout;
       console.log('Logged out');
     },
@@ -181,7 +181,6 @@ export default defineComponent({
 ::-webkit-scrollbar-thumb {
   background: $selected;
   width: 1px;
-  border-radius: 10ex;
 }
 
 ::-webkit-scrollbar-thumb:hover {

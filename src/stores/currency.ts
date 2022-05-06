@@ -2,11 +2,11 @@ import { defineStore } from 'pinia';
 import { Notify } from 'quasar';
 import { api } from 'src/boot/axios';
 
-const predefinedCurrencies = ['USD', 'GBP', 'SEK', 'EUR', 'JPY'];
+export const predefinedCurrencies = ['USD', 'GBP', 'SEK', 'EUR', 'JPY'];
 
 export const useCurrencyStore = defineStore('currency', {
   state: () => ({
-    currency: 'USD',
+    currency: 'EUR',
   }),
 
   getters: {},

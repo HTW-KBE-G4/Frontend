@@ -11,9 +11,12 @@
         :price="component.uvp"
         @click="showDetails(component.id)"
       ></GeneralCard>
-      <div v-if="components.length === 0">No Components available 😥</div>
+      <div v-if="components.length === 0" class="text-subtitle1">
+        No Components available 😥
+      </div>
     </div>
   </q-page>
+  <router-view></router-view>
 </template>
 
 <script lang="ts">
@@ -26,52 +29,6 @@ import { useCurrencyStore } from 'src/stores/currency';
 const currencyStore = useCurrencyStore();
 const componentList = ref<Component[]>([]);
 
-/*const componentTestList = [
-  {
-    productName:
-      'Extrem aktueller und cooler PC .. . .. .TEST OVERFLOW AHHHHHHHHHHHHHHHH AHHHHHHHHHHHHHHHH TEST TEST TEST',
-    imageUrl:
-      'https://cdn.pixabay.com/photo/2013/07/12/18/58/computer-154114_960_720.png',
-    type: '',
-    model: '',
-    description: '',
-    manufacturer: '',
-    releaseDate: '',
-    uvp: 114.99,
-    weight: '',
-    ean: '',
-    id: 1,
-  },
-  {
-    productName: 'Drucker  PC (+Exklusives Tinten-Abo für nur 39€/m)',
-    uvp: 78.49,
-    imageUrl:
-      'https://cdn.pixabay.com/photo/2013/07/13/12/10/print-159336_960_720.png',
-    type: '',
-    model: '',
-    description: '',
-    manufacturer: '',
-    releaseDate: '',
-    weight: '',
-    ean: '',
-    id: 1,
-  },
-  {
-    productName: 'Microsoft PC',
-    id: 1,
-    uvp: 999999999992.0,
-    imageUrl:
-      'https://cdn.pixabay.com/photo/2017/04/04/18/07/video-game-console-2202570_960_720.jpg',
-    type: '',
-    model: '',
-    description: '',
-    manufacturer: '',
-    releaseDate: '',
-    weight: '',
-    ean: '',
-  },
-];*/
-
 async function loadComponents(currency: string) {
   try {
     componentList.value = await componentApi.getAll(currency);
@@ -80,7 +37,6 @@ async function loadComponents(currency: string) {
       type: 'negative',
       message: 'Components could not be fetched',
     });
-    //componentList.value = componentTestList;
   }
   return { products: componentList };
 }
@@ -91,17 +47,16 @@ export default defineComponent({
 
   methods: {
     showDetails(id: number) {
-      //this.$router.push(`/components/${id.toString()}`)
-      console.log('Showing details of component with the ID ' + id);
+      this.$router.push(`/components/${id}`);
     },
   },
 
   async setup() {
+    loadComponents(currencyStore.currency);
+
     currencyStore.$subscribe((_mutation, state) => {
       loadComponents(state.currency);
     });
-
-    loadComponents(currencyStore.currency);
 
     return { components: componentList };
   },
