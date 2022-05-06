@@ -8,9 +8,9 @@ export interface Component {
   manufacturer: string;
   releaseDate: string;
   uvp: number;
-  weight: string;
+  weight: number;
   productName: string;
-  ean: string;
+  ean: number;
   imageUrl: string;
 }
 
