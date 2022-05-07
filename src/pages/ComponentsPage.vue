@@ -23,8 +23,9 @@
 import { defineComponent, ref } from 'vue';
 import { Notify } from 'quasar';
 import GeneralCard from 'components/GeneralCard.vue';
-import { Component, componentApi } from 'src/api/component';
+import { Component } from 'src/stores/component';
 import { useCurrencyStore } from 'src/stores/currency';
+import { useComponentStore } from 'src/stores/component';
 
 const currencyStore = useCurrencyStore();
 const componentList = ref<Component[]>([]);
@@ -32,7 +33,7 @@ const isLoading = ref<boolean>(true);
 
 async function loadComponents(currency: string) {
   try {
-    componentList.value = await componentApi.getAll(currency);
+    componentList.value = await useComponentStore().getAll(currency);
   } catch (error) {
     Notify.create({
       type: 'negative',

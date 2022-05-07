@@ -13,8 +13,9 @@
 </template>
 
 <script lang="ts">
+import { computed } from '@vue/reactivity';
 import { useCurrencyStore } from 'src/stores/currency';
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 
 const currencyStore = useCurrencyStore();
 
@@ -36,12 +37,9 @@ export default defineComponent({
   },
 
   setup() {
-    const updatableCurrency = ref(currencyStore.currency);
-    currencyStore.$subscribe((_mutation, state) => {
-      updatableCurrency.value = state.currency;
-    });
+    const currency = computed<string>(() => currencyStore.currency);
     return {
-      currency: updatableCurrency,
+      currency,
     };
   },
 });

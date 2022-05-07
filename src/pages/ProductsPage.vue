@@ -30,8 +30,8 @@
 import { defineComponent, ref } from 'vue';
 import { Notify } from 'quasar';
 import GeneralCard from 'components/GeneralCard.vue';
-import { Product, productApi } from 'src/api/product';
 import { useCurrencyStore } from 'src/stores/currency';
+import { useProductStore, Product } from 'src/stores/product';
 
 const currencyStore = useCurrencyStore();
 const productList = ref<Product[]>([]);
@@ -39,7 +39,7 @@ const isLoading = ref<boolean>(true);
 
 async function loadProducts(currency: string) {
   try {
-    productList.value = await productApi.getAll(currency);
+    productList.value = await useProductStore().getAll(currency);
   } catch (error) {
     Notify.create({
       type: 'negative',
@@ -67,7 +67,6 @@ export default defineComponent({
   async setup() {
     loadProducts(currencyStore.currency);
 
-    // Refresh products when the user changes currencies
     currencyStore.$subscribe((_mutation, state) => {
       loadProducts(state.currency);
     });

@@ -58,10 +58,10 @@
 
 <script lang="ts">
 import { Notify } from 'quasar';
-import { Component, componentApi } from 'src/api/component';
 import { defineComponent, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useCurrencyStore } from 'src/stores/currency';
+import { useComponentStore, Component } from 'src/stores/component';
 
 const component = ref<Component>();
 
@@ -75,7 +75,10 @@ export default defineComponent({
 
     try {
       const id = parseInt(route.params.id as string);
-      component.value = await componentApi.get(id, currencyStore.currency);
+      component.value = await useComponentStore().get(
+        id,
+        currencyStore.currency
+      );
     } catch (error) {
       Notify.create({
         type: 'negative',

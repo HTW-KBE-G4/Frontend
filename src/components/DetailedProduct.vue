@@ -32,8 +32,8 @@ import { defineComponent, ref } from 'vue';
 import GeneralCard from './GeneralCard.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useCurrencyStore } from 'src/stores/currency';
-import { Product, productApi } from 'src/api/product';
 import { Notify } from 'quasar';
+import { useProductStore, Product } from 'src/stores/product';
 
 const product = ref<Product>();
 
@@ -51,7 +51,7 @@ export default defineComponent({
 
     try {
       const id = parseInt(route.params.id as string);
-      product.value = await productApi.get(id, currencyStore.currency);
+      product.value = await useProductStore().get(id, currencyStore.currency);
     } catch (error) {
       Notify.create({
         type: 'negative',
