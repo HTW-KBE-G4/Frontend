@@ -1,49 +1,67 @@
 <template>
-  <q-page class="row items-center justify-evenly">
-    <example-component
-      title="Example component"
-      active
-      :todos="todos"
-      :meta="meta"
-    ></example-component>
+  <q-page>
+    <div class="q-ma-sm q-gutter-md row">
+      <GeneralCard
+        :component="component"
+        v-for="component in components"
+        :key="component.id"
+        v-bind="component"
+        :name="component.productName"
+        :image-url="component.imageUrl"
+        :price="component.uvp"
+        @click="showDetails(component.id)"
+      ></GeneralCard>
+      <div v-if="loading" class="text-subtitle1">
+        <q-spinner-ball color="primary" size="2em" />
+      </div>
+    </div>
   </q-page>
+  <router-view></router-view>
 </template>
 
 <script lang="ts">
-import { Todo, Meta } from 'components/models';
-import ExampleComponent from 'components/ExampleComponent.vue';
 import { defineComponent, ref } from 'vue';
+import { Notify } from 'quasar';
+import GeneralCard from 'components/GeneralCard.vue';
+import { Component } from 'src/stores/component';
+import { useCurrencyStore } from 'src/stores/currency';
+import { useComponentStore } from 'src/stores/component';
+
+const currencyStore = useCurrencyStore();
+const componentList = ref<Component[]>([]);
+const isLoading = ref<boolean>(true);
+
+async function loadComponents(currency: string) {
+  try {
+    componentList.value = await useComponentStore().getAll(currency);
+  } catch (error) {
+    Notify.create({
+      type: 'negative',
+      message: 'Components could not be fetched',
+    });
+  }
+  isLoading.value = false;
+  return { products: componentList };
+}
 
 export default defineComponent({
-  name: 'ComponentsPage',
-  components: { ExampleComponent },
-  setup() {
-    const todos = ref<Todo[]>([
-      {
-        id: 1,
-        content: 'ct1',
-      },
-      {
-        id: 2,
-        content: 'ct2',
-      },
-      {
-        id: 3,
-        content: 'ct3',
-      },
-      {
-        id: 4,
-        content: 'ct4',
-      },
-      {
-        id: 5,
-        content: 'ct5',
-      },
-    ]);
-    const meta = ref<Meta>({
-      totalCount: 1200,
+  name: 'ProductsPage',
+  components: { GeneralCard },
+
+  methods: {
+    showDetails(id: number) {
+      this.$router.push(`/components/${id}`);
+    },
+  },
+
+  async setup() {
+    loadComponents(currencyStore.currency);
+
+    currencyStore.$subscribe((_mutation, state) => {
+      loadComponents(state.currency);
     });
-    return { todos, meta };
+
+    return { components: componentList, loading: isLoading };
   },
 });
 </script>

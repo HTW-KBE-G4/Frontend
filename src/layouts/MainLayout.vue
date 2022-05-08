@@ -18,22 +18,21 @@
           :icon="$q.dark.isActive ? 'light_mode' : 'dark_mode'"
           @click="toggleDarkMode"
         />
+
         <q-btn-dropdown
           class="bg-white text-black q-ma-sm"
           text-primary
-          v-bind:label="selectedCurrency.name"
+          v-bind:label="currency"
         >
           <q-list>
             <q-item
               v-for="currency in currencies"
-              :key="currency.name"
-              v-bind="currency"
+              :key="currency.at"
               clickable
               v-close-popup
               @click="selectCurrency(currency)"
             >
-              <q-item-section>{{ currency.name }}</q-item-section>
-              <q-item-section side>{{ currency.symbol }}</q-item-section>
+              <q-item-section>{{ currency }}</q-item-section>
             </q-item>
           </q-list>
         </q-btn-dropdown>
@@ -103,42 +102,30 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-//import { useRouter } from 'vue-router';
+import { useQuasar } from 'quasar';
 import MenuItem from 'components/MenuItem.vue';
+import { useCurrencyStore } from 'stores/currency';
 
 const menuItemList = [
   {
     title: 'Products',
     icon: 'shopping_cart',
-    path: 'products',
+    path: '/products',
   },
   {
     title: 'Components',
     icon: 'memory',
-    path: 'components',
+    path: '/components',
   },
   {
     title: 'About',
     icon: 'groups',
-    path: 'about',
+    path: '/about',
   },
 ];
 
-// Hardcoded list for now
-const currencyList = [
-  {
-    name: 'EUR',
-    symbol: '€',
-  },
-  {
-    name: 'USD',
-    symbol: '$',
-  },
-  {
-    name: 'YEN',
-    symbol: '¥',
-  },
-];
+const currencyStore = useCurrencyStore();
+const currencyList = ref<string[]>([]);
 
 export default defineComponent({
   name: 'MainLayout',
@@ -148,42 +135,46 @@ export default defineComponent({
   methods: {
     onMenuItemClick(path: string) {
       this.$router.push(path);
-      console.log('Switched to path: ' + path);
     },
 
-    selectCurrency(currency: { name: string; symbol: string }) {
-      this.selectedCurrency = currency;
-      console.log('Currency set to ' + currency.name);
+    selectCurrency(currency: string) {
+      currencyStore.change(currency);
+      this.currency = currencyStore.currency;
+      localStorage.setItem('currency', this.currency);
     },
 
     logout() {
-      //void router.push(/); ?
       //keycloak.logout;
       console.log('Logged out');
     },
 
     toggleDarkMode() {
-      // TODO: localStorage
-      // $q.dark.isActive();
       this.$q.dark.toggle();
+      localStorage.setItem('darkMode', this.$q.dark.isActive.toString());
     },
   },
 
-  setup() {
-    //TODO: fill currencyList by getting String Array (?) of available currencies from backend
+  async setup() {
+    const $q = useQuasar();
 
-    //TODO: Wait for product page to load and then do something like .. mabye
-    //const router = useRouter();
-    //router.push('/products');
+    currencyList.value = await currencyStore.getAll();
+
+    const savedMode = localStorage.getItem('darkMode');
+    if (savedMode) {
+      $q.dark.set(savedMode === 'true' ? true : false);
+    }
+
+    const savedCurrency = localStorage.getItem('currency');
+    if (savedCurrency) {
+      currencyStore.change(savedCurrency);
+    }
+    let currency = ref(currencyStore.currency);
 
     return {
       drawer: ref(false),
       menuItems: menuItemList,
       currencies: currencyList,
-      selectedCurrency: ref({
-        name: 'EUR',
-        symbol: '€',
-      }),
+      currency,
     };
   },
 });
@@ -197,7 +188,6 @@ export default defineComponent({
 ::-webkit-scrollbar-thumb {
   background: $selected;
   width: 1px;
-  border-radius: 10ex;
 }
 
 ::-webkit-scrollbar-thumb:hover {

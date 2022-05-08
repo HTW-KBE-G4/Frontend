@@ -1,60 +1,77 @@
 <template>
   <q-page>
     <div class="q-ma-sm q-gutter-md row">
-      <ProductCard
+      <GeneralCard
+        :product="product"
         v-for="product in products"
-        :key="product.name"
+        :key="product.id"
         v-bind="product"
-      ></ProductCard>
+        :name="product.name"
+        :image-url="product.imageUrl"
+        :price="product.price"
+        @click="showDetails(product.id)"
+      ></GeneralCard>
+      <div v-if="loading" class="text-subtitle1">
+        <q-spinner-ball color="primary" size="2em" />
+      </div>
       <q-card class="create-card row justify-center items-center no-box-shadow">
         <q-card-section class="text-center">
-          <q-btn flat round class="create-button" @click="createProduct">
+          <q-btn flat round class="create-button" @click="createProduct()">
             <q-icon color="grey" size="4em" name="control_point" />
           </q-btn>
         </q-card-section>
       </q-card>
     </div>
   </q-page>
+  <router-view></router-view>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import ProductCard from 'components/ProductCard.vue';
+import { defineComponent, ref } from 'vue';
+import { Notify } from 'quasar';
+import GeneralCard from 'components/GeneralCard.vue';
+import { useCurrencyStore } from 'src/stores/currency';
+import { useProductStore, Product } from 'src/stores/product';
 
-const productList = [
-  {
-    name: 'Extrem aktueller und cooler PC .. . .. .TEST OVERFLOW AHHHHHHHHHHHHHHHH AHHHHHHHHHHHHHHHH TEST TEST TEST',
-    price: '114,99 €',
-    image:
-      'https://cdn.pixabay.com/photo/2013/07/12/18/58/computer-154114_960_720.png',
-  },
-  {
-    name: 'Drucker  PC (+Exklusives Tinten-Abo für nur 39€/m)',
-    price: '78,49 €',
-    image:
-      'https://cdn.pixabay.com/photo/2013/07/13/12/10/print-159336_960_720.png',
-  },
-  {
-    name: 'Microsoft PC',
-    price: '999999999992,00 €',
-    image:
-      'https://cdn.pixabay.com/photo/2017/04/04/18/07/video-game-console-2202570_960_720.jpg',
-  },
-];
+const currencyStore = useCurrencyStore();
+const productList = ref<Product[]>([]);
+const isLoading = ref<boolean>(true);
+
+async function loadProducts(currency: string) {
+  try {
+    productList.value = await useProductStore().getAll(currency);
+  } catch (error) {
+    Notify.create({
+      type: 'negative',
+      message: 'Products could not be fetched',
+    });
+  }
+  isLoading.value = false;
+  return { products: productList };
+}
 
 export default defineComponent({
   name: 'ProductsPage',
-  components: { ProductCard },
+  components: { GeneralCard },
 
   methods: {
     createProduct() {
       //this.$router.push(create...);
       console.log('Creating a product');
     },
+    showDetails(id: number) {
+      this.$router.push(`/products/${id}`);
+    },
   },
 
-  setup() {
-    return { products: productList };
+  async setup() {
+    loadProducts(currencyStore.currency);
+
+    currencyStore.$subscribe((_mutation, state) => {
+      loadProducts(state.currency);
+    });
+
+    return { products: productList, loading: isLoading };
   },
 });
 </script>
