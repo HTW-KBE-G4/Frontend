@@ -1,10 +1,10 @@
 <template>
-  <q-dialog v-model="show" persistent square @shake="$router.back()"
+  <q-dialog v-model="show" persistent square @shake="$router.push('/products')"
     ><q-card style="max-width: 75vh" v-if="product">
       <q-toolbar class="bg-accent text-white">
         <q-item-label class="text-subtitle1">{{ product.name }} </q-item-label>
         <q-space />
-        <q-btn dense flat icon="arrow_back" @click="$router.back()" />
+        <q-btn dense flat icon="close" @click="$router.push('/products')" />
       </q-toolbar>
       <div class="q-ma-sm q-gutter-md row">
         <q-card-section class="text-h5" horizontal style="width: 100%">
@@ -12,14 +12,12 @@
           <div class="text-positive">{{ product.price }} {{ currency }}</div>
         </q-card-section>
         <GeneralCard
-          :product="product"
           v-for="component in product.components"
           :key="component.id"
-          v-bind="component"
           :name="component.productName"
           :image-url="component.imageUrl"
           :price="component.uvp"
-          @click="showDetails(product?.id, component.id)"
+          @click="showDetails(product!.id, component.id)"
         ></GeneralCard>
       </div>
     </q-card>

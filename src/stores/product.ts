@@ -27,8 +27,9 @@ export const useProductStore = defineStore('products', {
       return this.products.find((product) => product.id === id);
     },
 
-    async create(product: Product): Promise<unknown> {
-      const response = await api.post<Product[]>('products/create', product);
+    async create(components: Component[]): Promise<unknown> {
+      // ? local storage
+      const response = await api.post('products/create', components);
       return response.data;
     },
 

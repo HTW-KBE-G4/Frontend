@@ -6,6 +6,7 @@ const ComponentsPage = () => import('src/pages/ComponentsPage.vue');
 const AboutPage = () => import('pages/AboutPage.vue');
 const DetailedProduct = () => import('components/DetailedProduct.vue');
 const DetailedComponent = () => import('components/DetailedComponent.vue');
+const CreateProductDialog = () => import('components/CreateProductDialog.vue');
 
 const routes: RouteRecordRaw[] = [
   {
@@ -27,6 +28,10 @@ const routes: RouteRecordRaw[] = [
               },
             ],
           },
+          {
+            path: 'create',
+            component: CreateProductDialog,
+          },
         ],
       },
       {
@@ -43,8 +48,6 @@ const routes: RouteRecordRaw[] = [
         path: 'about',
         component: AboutPage,
       },
-
-      //add /products/create
     ],
   },
 

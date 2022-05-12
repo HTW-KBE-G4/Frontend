@@ -2,10 +2,8 @@
   <q-page>
     <div class="q-ma-sm q-gutter-md row">
       <GeneralCard
-        :product="product"
         v-for="product in products"
         :key="product.id"
-        v-bind="product"
         :name="product.name"
         :image-url="product.imageUrl"
         :price="product.price"
@@ -31,15 +29,15 @@ import { defineComponent, ref } from 'vue';
 import { Notify } from 'quasar';
 import GeneralCard from 'components/GeneralCard.vue';
 import { useCurrencyStore } from 'src/stores/currency';
-import { useProductStore, Product } from 'src/stores/product';
+import { useProductStore } from 'src/stores/product';
+import { computed } from '@vue/reactivity';
 
 const currencyStore = useCurrencyStore();
-const productList = ref<Product[]>([]);
 const isLoading = ref<boolean>(true);
 
 async function loadProducts(currency: string) {
   try {
-    productList.value = await useProductStore().getAll(currency);
+    await useProductStore().getAll(currency);
   } catch (error) {
     Notify.create({
       type: 'negative',
@@ -47,17 +45,20 @@ async function loadProducts(currency: string) {
     });
   }
   isLoading.value = false;
-  return { products: productList };
 }
 
 export default defineComponent({
   name: 'ProductsPage',
   components: { GeneralCard },
+  computed: {
+    products() {
+      return useProductStore().$state.products;
+    },
+  },
 
   methods: {
     createProduct() {
-      //this.$router.push(create...);
-      console.log('Creating a product');
+      this.$router.push('/products/create');
     },
     showDetails(id: number) {
       this.$router.push(`/products/${id}`);
@@ -71,7 +72,7 @@ export default defineComponent({
       loadProducts(state.currency);
     });
 
-    return { products: productList, loading: isLoading };
+    return { loading: isLoading };
   },
 });
 </script>
