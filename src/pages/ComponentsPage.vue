@@ -9,6 +9,12 @@
         :price="component.uvp"
         @click="showDetails(component.id)"
       ></GeneralCard>
+      <div
+        v-if="components.length === 0 && !loading"
+        class="q-mr-md text-subtitle1"
+      >
+        No components available 😢
+      </div>
       <div v-if="loading" class="text-subtitle1">
         <q-spinner-ball color="primary" size="2em" />
       </div>

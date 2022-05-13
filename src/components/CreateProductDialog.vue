@@ -1,6 +1,6 @@
 <template>
   <q-dialog position="right" v-model="show" seamless persistent square>
-    <q-card style="max-width: 75vh">
+    <q-card style="max-width: 75vh; min-height: 20vh; min-width: 50vh">
       <q-toolbar class="bg-accent text-white">
         <q-item-label class="text-h6 absolute-center"
           >Create a Product</q-item-label
@@ -9,7 +9,13 @@
         <q-btn dense flat icon="close" @click="$router.push('/products')" />
       </q-toolbar>
       <q-card-section class="text-subtitle1" style="width: 100%">
-        <div class="q-mr-md">Select components:</div>
+        <div
+          v-if="selectableComponents.length === 0 && !loadingComponents"
+          class="q-mr-md"
+        >
+          No components available 😢
+        </div>
+        <div v-else class="q-mr-md">Select components:</div>
       </q-card-section>
       <q-card-section class="q-gutter-md row scroll" style="max-height: 50vh">
         <GeneralCard
@@ -22,7 +28,7 @@
             selectable.selected
               ? {
                   background: 'rgba(0, 85, 153, 0.2)',
-                  outline: '1px solid rgba(0, 85, 153, 0.8)',
+                  outline: '2px solid rgba(0, 85, 153, 0.8)',
                 }
               : {}
           "
@@ -41,7 +47,7 @@
        -->
       <q-card-actions class="q-ma-sm" align="right">
         <q-btn
-          :disable="selectedComponents.length <= 0"
+          :disable="selectedComponents.length === 0"
           :loading="loadingCreate"
           icon-right="add"
           color="positive"
