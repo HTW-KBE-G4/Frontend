@@ -18,9 +18,7 @@
       >
       <q-card-section>
         <q-item-label class="text-subtitle2">Price:</q-item-label>
-        <q-item-label class="text-positive"
-          >{{ component.uvp }} {{ currency }}</q-item-label
-        >
+        <q-item-label class="text-positive">{{ formattedPrice }}</q-item-label>
       </q-card-section>
       <q-card-section>
         <q-item-label class="text-subtitle2">Description:</q-item-label>
@@ -58,12 +56,15 @@
 
 <script lang="ts">
 import { Notify } from 'quasar';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useCurrencyStore } from 'src/stores/currency';
-import { useComponentStore, Component } from 'src/stores/component';
+import {
+  useComponentStore,
+  HardwareComponent,
+} from 'src/stores/hardwareComponent';
 
-const component = ref<Component>();
+const component = ref<HardwareComponent>();
 
 export default defineComponent({
   name: 'DetailedComponent',
@@ -82,15 +83,19 @@ export default defineComponent({
     } catch (error) {
       Notify.create({
         type: 'negative',
-        message: 'Component could not be loaded or does not exist',
+        message: 'Hardware Component does not exist',
       });
-      router.push('/components');
+      router.back();
     }
+
+    const formattedPrice = computed<string>(() =>
+      currencyStore.formatPrice(component.value?.uvp || 0)
+    );
 
     return {
       show: ref(true),
       component: component,
-      currency: currencyStore.currency,
+      formattedPrice,
     };
   },
 });

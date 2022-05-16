@@ -13,7 +13,7 @@
         v-if="components.length === 0 && !loading"
         class="q-mr-md text-subtitle1"
       >
-        No components available 😢
+        No hardware components available 😢
       </div>
       <div v-if="loading" class="text-subtitle1">
         <q-spinner-ball color="primary" size="2em" />
@@ -24,11 +24,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import { Notify } from 'quasar';
 import GeneralCard from 'components/GeneralCard.vue';
 import { useCurrencyStore } from 'src/stores/currency';
-import { useComponentStore } from 'src/stores/component';
+import { useComponentStore } from 'src/stores/hardwareComponent';
 
 const currencyStore = useCurrencyStore();
 const isLoading = ref<boolean>(true);
@@ -39,7 +39,7 @@ async function loadComponents(currency: string) {
   } catch (error) {
     Notify.create({
       type: 'negative',
-      message: 'Components could not be fetched',
+      message: 'Hardware components could not be fetched',
     });
   }
   isLoading.value = false;
@@ -62,9 +62,12 @@ export default defineComponent({
   async setup() {
     loadComponents(currencyStore.currency);
 
-    currencyStore.$subscribe((_mutation, state) => {
-      loadComponents(state.currency);
-    });
+    watch(
+      () => currencyStore.$state.currency,
+      (newCurrency) => {
+        loadComponents(newCurrency);
+      }
+    );
 
     return { loading: isLoading };
   },

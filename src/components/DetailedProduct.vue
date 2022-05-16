@@ -9,7 +9,7 @@
       <div class="q-ma-sm q-gutter-md row">
         <q-card-section class="text-h5" horizontal style="width: 100%">
           <div class="q-mr-md">Total:</div>
-          <div class="text-positive">{{ product.price }} {{ currency }}</div>
+          <div class="text-positive">{{ formattedPrice }}</div>
         </q-card-section>
         <GeneralCard
           v-for="component in product.components"
@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import GeneralCard from './GeneralCard.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useCurrencyStore } from 'src/stores/currency';
@@ -58,10 +58,14 @@ export default defineComponent({
       router.push('/products');
     }
 
+    const formattedPrice = computed<string>(() =>
+      currencyStore.formatPrice(product.value?.price || 0)
+    );
+
     return {
       show: ref(true),
       product: product,
-      currency: currencyStore.currency,
+      formattedPrice,
     };
   },
   components: { GeneralCard },

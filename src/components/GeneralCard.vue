@@ -7,7 +7,7 @@
     >
     <q-separator />
     <q-card-section class="general-price q-pt-sm text-positive"
-      >{{ price }} {{ currency }}
+      >{{ formattedPrice }}
     </q-card-section>
   </q-card>
 </template>
@@ -35,11 +35,12 @@ export default defineComponent({
       required: true,
     },
   },
-
-  setup() {
-    const currency = computed<string>(() => currencyStore.currency);
+  setup(props) {
+    const formattedPrice = computed<string>(() =>
+      currencyStore.formatPrice(props.price)
+    );
     return {
-      currency,
+      formattedPrice,
     };
   },
 });
