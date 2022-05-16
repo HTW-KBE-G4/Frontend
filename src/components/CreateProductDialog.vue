@@ -13,9 +13,9 @@
           v-if="selectableComponents.length === 0 && !loadingComponents"
           class="q-mr-md"
         >
-          No components available 😢
+          No hardware components available 😢
         </div>
-        <div v-else class="q-mr-md">Select components:</div>
+        <div v-else class="q-mr-md">Select hardware components:</div>
       </q-card-section>
       <q-card-section class="q-gutter-md row scroll" style="max-height: 50vh">
         <GeneralCard
@@ -66,13 +66,16 @@ import GeneralCard from './GeneralCard.vue';
 import { useCurrencyStore } from 'src/stores/currency';
 import { Notify } from 'quasar';
 import { useProductStore } from 'src/stores/product';
-import { Component, useComponentStore } from 'src/stores/component';
+import {
+  HardwareComponent,
+  useComponentStore,
+} from 'src/stores/hardwareComponent';
 
 const selectableComponentList = ref<SelectableComponent[]>([]);
 const isLoading = ref<boolean>(true);
 
 interface SelectableComponent {
-  component: Component;
+  component: HardwareComponent;
   selected: boolean;
 }
 
@@ -86,7 +89,7 @@ async function loadComponents(currency: string) {
   } catch (error) {
     Notify.create({
       type: 'negative',
-      message: 'Components could not be fetched',
+      message: 'Hardware components could not be fetched',
     });
   }
   isLoading.value = false;
@@ -100,7 +103,9 @@ export default defineComponent({
         .map((selectable) =>
           selectable.selected ? selectable.component : undefined
         )
-        .filter((component) => component as Component) as Component[];
+        .filter(
+          (component) => component as HardwareComponent
+        ) as HardwareComponent[];
     },
   },
   methods: {
