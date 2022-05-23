@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { api } from 'src/boot/axios';
 
-export interface Component {
+export interface HardwareComponent {
   id: number;
   type: string;
   model: string;
@@ -17,7 +17,7 @@ export interface Component {
 
 export const useComponentStore = defineStore('components', {
   state: () => ({
-    components: <Component[]>[],
+    components: <HardwareComponent[]>[],
     loadedCurrency: '',
   }),
 
@@ -32,7 +32,7 @@ export const useComponentStore = defineStore('components', {
       return this.components.find((component) => component.id === id);
     },
 
-    async get(id: number, currency?: string): Promise<Component> {
+    async get(id: number, currency?: string): Promise<HardwareComponent> {
       let url = `components/${id}`;
       if (currency) {
         url += `/?currency=${currency}`;
@@ -43,7 +43,7 @@ export const useComponentStore = defineStore('components', {
       if (component && this.loadedCurrency === currency) {
         return component;
       } else {
-        const response = await api.get<Component>(url);
+        const response = await api.get<HardwareComponent>(url);
         this.$patch({
           loadedCurrency: currency,
         });
@@ -51,7 +51,7 @@ export const useComponentStore = defineStore('components', {
       }
     },
 
-    async getAll(currency?: string): Promise<Component[]> {
+    async getAll(currency?: string): Promise<HardwareComponent[]> {
       let url = 'components';
       if (currency) {
         url += `/?currency=${currency}`;
@@ -59,7 +59,7 @@ export const useComponentStore = defineStore('components', {
       if (this.loaded && this.loadedCurrency === currency) {
         return this.components;
       } else {
-        const response = await api.get<Component[]>(url);
+        const response = await api.get<HardwareComponent[]>(url);
         this.$patch({
           components: response.data,
           loadedCurrency: currency,

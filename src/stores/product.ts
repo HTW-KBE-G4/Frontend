@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 import { api } from 'src/boot/axios';
-import { Component } from './component';
+import { HardwareComponent } from './hardwareComponent';
 
 export interface Product {
   id: number;
   name: string;
-  components: Component[];
+  components: HardwareComponent[];
   price: number;
   imageUrl: string;
 }
@@ -27,8 +27,9 @@ export const useProductStore = defineStore('products', {
       return this.products.find((product) => product.id === id);
     },
 
-    async create(product: Product): Promise<unknown> {
-      const response = await api.post<Product[]>('products/create', product);
+    async create(components: HardwareComponent[]): Promise<unknown> {
+      // ? local storage
+      const response = await api.post('products/create', components);
       return response.data;
     },
 
