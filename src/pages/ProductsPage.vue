@@ -26,10 +26,10 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
-import { Notify } from 'quasar';
 import GeneralCard from 'components/GeneralCard.vue';
 import { useCurrencyStore } from 'src/stores/currency';
 import { useProductStore } from 'src/stores/product';
+import { displayNotification } from 'src/utils';
 
 const currencyStore = useCurrencyStore();
 const isLoading = ref<boolean>(true);
@@ -38,10 +38,7 @@ async function loadProducts(currency: string) {
   try {
     await useProductStore().getAll(currency);
   } catch (error) {
-    Notify.create({
-      type: 'negative',
-      message: 'Products could not be fetched',
-    });
+    displayNotification('Products could not be fetched', true);
   }
   isLoading.value = false;
 }

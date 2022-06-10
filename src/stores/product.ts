@@ -27,17 +27,15 @@ export const useProductStore = defineStore('products', {
       return this.products.find((product) => product.id === id);
     },
 
-    async create(components: HardwareComponent[]): Promise<unknown> {
-      // ? local storage
-      const response = await api.post('products/create', components);
-      return response.data;
+    async create(name: string, components: HardwareComponent[]) {
+      const data = { name: name, components: components };
+      await api.post('products/create', data).then(async () => {
+        await this.getAll(this.loadedCurrency);
+      });
     },
 
     async get(id: number, currency?: string): Promise<Product> {
-      let url = `products/${id}`;
-      if (currency) {
-        url += `/?currency=${currency}`;
-      }
+      const url = `products/${id}` + (currency ? `/?currency=${currency}` : '');
       const product = this.findProduct(id);
 
       if (product && this.loadedCurrency === currency) {
@@ -47,15 +45,12 @@ export const useProductStore = defineStore('products', {
         this.$patch({
           loadedCurrency: currency,
         });
-        return response.data;
+        return response.data as Product;
       }
     },
 
     async getAll(currency?: string): Promise<Product[]> {
-      let url = 'products';
-      if (currency) {
-        url += `/?currency=${currency}`;
-      }
+      const url = 'products' + (currency ? `/?currency=${currency}` : '');
 
       if (this.loaded && this.loadedCurrency === currency) {
         return this.products;
@@ -65,7 +60,7 @@ export const useProductStore = defineStore('products', {
           products: response.data,
           loadedCurrency: currency,
         });
-        return response.data;
+        return response.data as Product[];
       }
     },
   },

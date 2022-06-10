@@ -10,7 +10,7 @@
 
 const { configure } = require('quasar/wrappers');
 
-module.exports = configure(function (/* ctx */) {
+module.exports = configure(function (ctx) {
   return {
     eslint: {
       // fix: true,
@@ -80,6 +80,16 @@ module.exports = configure(function (/* ctx */) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
       // https: true
+      port:
+        process.env.PORT != undefined
+          ? process.env.PORT
+          : ctx.mode.spa
+          ? 9000
+          : ctx.mode.paw
+          ? 9100
+          : ctx.mode.ssr
+          ? 9200
+          : 8000,
       open: true, // opens browser window automatically
     },
 

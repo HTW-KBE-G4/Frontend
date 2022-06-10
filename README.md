@@ -1,47 +1,49 @@
 # Tanuki Hardware Store (tanuki-hardware-store)
 
-A Hardware Store Simulation
+_A Hardware Store Simulation_
 
 ## Install the dependencies
 
-```bash
+```
 npm install
 ```
 
-### Create an .env file and change the API variable to your desired API endpoint
+### Create an .env file and change the API and PORT variables to your desired API endpoint and port the app should run on
 
-```bash
-See .env.example
+```
+See .env.example in the root directory
 ```
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
 
-```bash
+```
 quasar dev
 or
 npx quasar dev
 ```
 
+# For production only
+
 ### Lint the files
 
-```bash
+```
 npm run lint
 ```
 
 ### Format the files
 
-```bash
+```
 npm run format
 ```
 
 ### Build the app for production
 
-```bash
+```
 quasar build
 or
 npx quasar build
 ```
 
-### Customize the configuration
+### If needed customize the configuration:
 
 See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
