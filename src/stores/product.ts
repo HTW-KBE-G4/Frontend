@@ -33,12 +33,12 @@ export const useProductStore = defineStore('products', {
     },
 
     async get(id: number, currency: string): Promise<Product> {
-      const url = `products/${id}/?currency=${currency}`;
       const product = this.findProduct(id);
 
       if (product && this.loadedCurrency === currency) {
         return product;
       } else {
+        const url = `products/${id}/?currency=${currency}`;
         const response = await api.get<Product>(url);
         this.$patch({
           loadedCurrency: currency,
@@ -48,17 +48,17 @@ export const useProductStore = defineStore('products', {
     },
 
     async getAll(currency: string): Promise<Product[]> {
-      const url = `products/?currency=${currency}`;
-
       if (this.isUpToDate && this.loadedCurrency === currency) {
         return this.products;
       } else {
+        const url = `products/?currency=${currency}`;
         const response = await api.get<Product[]>(url);
         this.$patch({
           products: response.data,
           isUpToDate: true,
           loadedCurrency: currency,
         });
+
         return response.data as Product[];
       }
     },

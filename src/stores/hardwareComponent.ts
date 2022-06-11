@@ -30,12 +30,12 @@ export const useComponentStore = defineStore('components', {
     },
 
     async get(id: number, currency: string): Promise<HardwareComponent> {
-      const url = `components/${id}/?currency=${currency}`;
       const component = this.findComponent(id);
 
       if (component && this.loadedCurrency === currency) {
         return component;
       } else {
+        const url = `components/${id}/?currency=${currency}`;
         const response = await api.get<HardwareComponent>(url);
         this.$patch({
           loadedCurrency: currency,
@@ -45,11 +45,10 @@ export const useComponentStore = defineStore('components', {
     },
 
     async getAll(currency: string): Promise<HardwareComponent[]> {
-      const url = `components/?currency=${currency}`;
-
       if (this.isUpToDate && this.loadedCurrency === currency) {
         return this.components;
       } else {
+        const url = `components/?currency=${currency}`;
         const response = await api.get<HardwareComponent[]>(url);
         this.$patch({
           components: response.data as HardwareComponent[],
