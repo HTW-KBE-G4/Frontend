@@ -18,23 +18,19 @@ export interface HardwareComponent {
 export const useComponentStore = defineStore('components', {
   state: () => ({
     components: <HardwareComponent[]>[],
+    isUpToDate: false,
     loadedCurrency: 'USD',
   }),
 
-  getters: {
-    loaded(): boolean {
-      return this.components.length != 0;
-    },
-  },
+  getters: {},
 
   actions: {
     findComponent(id: number) {
       return this.components.find((component) => component.id === id);
     },
 
-    async get(id: number, currency?: string): Promise<HardwareComponent> {
-      const url =
-        `components/${id}` + (currency ? `/?currency=${currency}` : '');
+    async get(id: number, currency: string): Promise<HardwareComponent> {
+      const url = `components/${id}/?currency=${currency}`;
       const component = this.findComponent(id);
 
       if (component && this.loadedCurrency === currency) {
@@ -48,15 +44,16 @@ export const useComponentStore = defineStore('components', {
       }
     },
 
-    async getAll(currency?: string): Promise<HardwareComponent[]> {
-      const url = 'components' + (currency ? `/?currency=${currency}` : '');
+    async getAll(currency: string): Promise<HardwareComponent[]> {
+      const url = `components/?currency=${currency}`;
 
-      if (this.loaded && this.loadedCurrency === currency) {
+      if (this.isUpToDate && this.loadedCurrency === currency) {
         return this.components;
       } else {
         const response = await api.get<HardwareComponent[]>(url);
         this.$patch({
           components: response.data as HardwareComponent[],
+          isUpToDate: true,
           loadedCurrency: currency,
         });
         return response.data as HardwareComponent[];
