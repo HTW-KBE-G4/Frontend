@@ -1,5 +1,9 @@
 <template>
-  <q-dialog v-model="show" persistent square @shake="$router.push('/products')"
+  <q-dialog
+    transition-show="fade"
+    v-model="show"
+    persistent
+    @shake="$router.push('/products')"
     ><q-card style="max-width: 75vh" v-if="product">
       <q-toolbar class="bg-accent text-white">
         <q-item-label class="text-subtitle1">{{ product.name }} </q-item-label>

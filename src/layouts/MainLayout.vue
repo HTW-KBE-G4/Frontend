@@ -2,22 +2,31 @@
   <q-layout view="hHh Lpr fFf">
     <q-header elevated>
       <q-toolbar class="shadow-2 rounded-borders">
-        <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
+        <q-btn
+          class="q-mr-xl"
+          flat
+          @click="drawer = !drawer"
+          round
+          dense
+          icon="menu"
+        />
         <q-toolbar-title class="text-center">
-          <q-avatar size="65px" class="q-ma-xs q-mr-md">
+          <q-avatar size="65px" class="q-mr-md">
             <img src="/favicon.ico" />
           </q-avatar>
           Tanuki Hardware Store
         </q-toolbar-title>
         <q-btn
-          class="bg-white text-dark q-mr-md"
+          class="bg-primary text-dark q-mr-md"
+          flat
           round
           dense
           :icon="$q.dark.isActive ? 'light_mode' : 'dark_mode'"
           @click="toggleDarkMode"
         />
         <q-btn-dropdown
-          class="bg-white text-black q-ma-sm"
+          class="bg-primary text-white q-ma-sm"
+          flat
           text-primary
           style="width: 5em"
           v-bind:label="getCurrencySymbol(currency)"
@@ -54,7 +63,6 @@
           @click="onMenuItemClick(item.path)"
         />
       </q-list>
-      <q-separator />
       <q-btn
         class="q-ma-md absolute-bottom-left"
         icon="logout"
@@ -184,16 +192,16 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+::-webkit-scrollbar-track {
+  border-radius: 0.125rem;
+  background-color: lightgray;
+}
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 0.25rem;
+  border-radius: 0.125rem;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: $selected;
-  width: 1px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: $primary;
+  border-radius: 0.125rem;
+  background-color: gray;
 }
 </style>

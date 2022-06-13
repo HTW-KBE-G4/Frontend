@@ -1,5 +1,10 @@
 <template>
-  <q-item class="rounded-borders" clickable active-class="menu-item" :to="path">
+  <q-item
+    class="menu-item"
+    clickable
+    active-class="menu-item-active"
+    :to="path"
+  >
     <q-item-section v-if="icon" avatar>
       <q-icon :name="icon" />
     </q-item-section>
@@ -33,6 +38,10 @@ export default defineComponent({
 
 <style lang="scss">
 .menu-item {
+  border-radius: 14px;
+  margin-top: 2%;
+}
+.menu-item-active {
   color: $secondary;
   background-color: $primary;
 }

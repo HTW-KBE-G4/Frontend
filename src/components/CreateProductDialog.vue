@@ -1,5 +1,5 @@
 <template>
-  <q-dialog position="right" v-model="show" seamless persistent square>
+  <q-dialog position="right" v-model="show" seamless persistent>
     <q-card style="max-width: 75vh; min-height: 20vh; min-width: 50vh">
       <q-toolbar class="bg-accent text-white">
         <q-item-label class="text-h6 absolute-center"
@@ -28,7 +28,7 @@
             selectable.selected
               ? {
                   background: 'rgba(0, 85, 153, 0.2)',
-                  outline: '2px solid rgba(0, 85, 153, 0.8)',
+                  outline: '3px solid rgba(0, 85, 153, 0.5)',
                 }
               : {}
           "

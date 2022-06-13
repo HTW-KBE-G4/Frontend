@@ -1,5 +1,10 @@
 <template>
-  <q-dialog v-model="show" square persistent @shake="$router.back()">
+  <q-dialog
+    transition-show="fade"
+    v-model="show"
+    persistent
+    @shake="$router.back()"
+  >
     <q-card style="max-height: 90vh" v-if="component">
       <q-toolbar class="bg-accent text-white">
         <q-item-label class="text-h6"
