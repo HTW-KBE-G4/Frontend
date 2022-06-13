@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import { Notify } from 'quasar';
 import GeneralCard from 'components/GeneralCard.vue';
 import { useCurrencyStore } from 'src/stores/currency';
@@ -62,9 +62,12 @@ export default defineComponent({
   async setup() {
     loadComponents(currencyStore.currency);
 
-    currencyStore.$subscribe((_mutation, state) => {
-      loadComponents(state.currency);
-    });
+    watch(
+      () => currencyStore.$state.currency,
+      (newCurrency) => {
+        loadComponents(newCurrency);
+      }
+    );
 
     return { loading: isLoading };
   },

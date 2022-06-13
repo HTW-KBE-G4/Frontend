@@ -22,7 +22,8 @@
         <q-btn-dropdown
           class="bg-white text-black q-ma-sm"
           text-primary
-          v-bind:label="currency"
+          style="width: 5em"
+          v-bind:label="getCurrencySymbol(currency)"
         >
           <q-list>
             <q-item
@@ -31,8 +32,10 @@
               clickable
               v-close-popup
               @click="selectCurrency(currency)"
-            >
-              <q-item-section>{{ currency }}</q-item-section>
+              ><q-item-label class="absolute-center">{{
+                getCurrencySymbol(currency)
+              }}</q-item-label>
+              <q-separator />
             </q-item>
           </q-list>
         </q-btn-dropdown>
@@ -143,6 +146,10 @@ export default defineComponent({
       localStorage.setItem('currency', this.currency);
     },
 
+    getCurrencySymbol(currency: string): string {
+      return currencyStore.getCurrencySymbol(currency);
+    },
+
     logout() {
       //keycloak.logout;
       console.log('Logged out');
@@ -157,7 +164,7 @@ export default defineComponent({
   async setup() {
     const $q = useQuasar();
 
-    currencyList.value = await currencyStore.getAll();
+    currencyList.value = currencyStore.currencies;
 
     const savedMode = localStorage.getItem('darkMode');
     if (savedMode) {
@@ -168,6 +175,7 @@ export default defineComponent({
     if (savedCurrency) {
       currencyStore.change(savedCurrency);
     }
+
     let currency = ref(currencyStore.currency);
 
     return {
