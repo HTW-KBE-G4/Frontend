@@ -3,7 +3,7 @@
     <q-header elevated>
       <q-toolbar class="shadow-2 rounded-borders">
         <q-btn
-          class="q-mr-xl"
+          style="margin-right: 8em"
           flat
           @click="drawer = !drawer"
           round
@@ -17,7 +17,7 @@
           Tanuki Hardware Store
         </q-toolbar-title>
         <q-btn
-          class="bg-primary text-dark q-mr-md"
+          class="bg-primary text-white q-mr-md"
           flat
           round
           dense
@@ -25,10 +25,13 @@
           @click="toggleDarkMode"
         />
         <q-btn-dropdown
-          class="bg-primary text-white q-ma-sm"
+          class="text-white q-ma-sm"
           flat
-          text-primary
-          style="width: 5em"
+          style="
+            width: 5em;
+            outline: 8px ridge rgba(170, 50, 220, 0.6);
+            border-radius: 1rem;
+          "
           v-bind:label="getCurrencySymbol(currency)"
         >
           <q-list>
@@ -69,7 +72,7 @@
         rounded
         color="negative"
         label="Logout"
-        @click="logout"
+        @click="logout()"
       />
     </q-drawer>
     <q-footer
@@ -92,7 +95,7 @@
           </q-avatar>
         </a>
         <a
-          class="text-grey text-subtitle2"
+          class="text-grey-9 text-subtitle2"
           href="https://www.flaticon.com/free-icons/raccoon"
           title="raccoon icons"
           >Raccoon icons created by Freepik - Flaticon</a
