@@ -8,14 +8,14 @@
         <q-space />
         <q-btn dense flat icon="close" @click="$router.push('/products')" />
       </q-toolbar>
-      <q-card-section class="text-subtitle1" style="width: 100%">
-        <div
-          v-if="selectableComponents.length === 0 && !loadingComponents"
-          class="q-mr-md"
-        >
+      <q-card-section
+        class="q-mt-md"
+        style="width: 100%; font-weight: normal; font-size: large"
+      >
+        <div v-if="selectableComponents.length === 0 && !loadingComponents">
           No hardware components available 😢
         </div>
-        <div v-else class="q-mr-md">Select hardware components:</div>
+        <div v-else>Select hardware components:</div>
       </q-card-section>
       <q-card-section class="q-gutter-md row scroll" style="max-height: 50vh">
         <GeneralCard
@@ -24,14 +24,7 @@
           :name="selectable.component.productName"
           :image-url="selectable.component.imageUrl"
           :price="selectable.component.uvp"
-          v-bind:style="
-            selectable.selected
-              ? {
-                  background: 'rgba(0, 85, 153, 0.2)',
-                  outline: '3px solid rgba(0, 85, 153, 0.5)',
-                }
-              : {}
-          "
+          v-bind:style="selectable.selected ? styleSelected : styleUnselcted"
           @click="select(selectable)"
         >
         </GeneralCard>
@@ -68,6 +61,7 @@ import {
   useComponentStore,
 } from 'src/stores/hardwareComponent';
 import { displayNotification } from 'src/utils';
+import { colors } from 'quasar';
 
 const selectableComponentList = ref<SelectableComponent[]>([]);
 const isLoading = ref<boolean>(true);
@@ -92,6 +86,7 @@ async function loadComponents(currency: string) {
 
 export default defineComponent({
   name: 'CreateProductDialog',
+  components: { GeneralCard },
   computed: {
     selectedComponents() {
       return selectableComponentList.value
@@ -147,8 +142,12 @@ export default defineComponent({
       loadingComponents: isLoading,
       nameInput: ref(''),
       selectableComponents: selectableComponentList,
+      styleSelected: {
+        background: 'rgba(100, 149, 255, 0.2)',
+        outline: '3px solid rgba(100, 149, 255, 0.8)',
+      },
+      styleUnselcted: {},
     };
   },
-  components: { GeneralCard },
 });
 </script>

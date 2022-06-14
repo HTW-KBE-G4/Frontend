@@ -21,7 +21,7 @@
           {{ component.productName }}
         </a></q-card-section
       >
-      <q-separator color="accent" inset />
+      <q-separator inset />
       <q-card-section>
         <q-item-label class="property"
           >Price:
