@@ -54,7 +54,7 @@ export default defineComponent({
 .general-card {
   max-width: 22vh;
   max-height: 38vh;
-  box-shadow: 2px 4px 12px rgb(0, 0, 0, 0.2);
+  box-shadow: 1px 1px 16px rgb(0, 0, 0, 0.2);
   border-radius: 12px;
 }
 

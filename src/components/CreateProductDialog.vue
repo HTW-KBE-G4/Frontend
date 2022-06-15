@@ -61,7 +61,6 @@ import {
   useComponentStore,
 } from 'src/stores/hardwareComponent';
 import { displayNotification } from 'src/utils';
-import { colors } from 'quasar';
 
 const selectableComponentList = ref<SelectableComponent[]>([]);
 const isLoading = ref<boolean>(true);

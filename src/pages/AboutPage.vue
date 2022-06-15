@@ -1,31 +1,33 @@
 <template>
-  <div class="general">
-    <h1 class="topic">What is "Tanuki Hardware Store"?</h1>
-    <p>
-      <strong>"Tanuki Hardware Store"</strong> is a university project that aims
-      to show how to build a component-based application. This means instead of
-      following a monolithic design stategy, every important task is outsourced
-      to a microservice, creating a microservice system where services are only
-      minimally interdependent and should be individually
-      exchangable/upgradable.
-    </p>
-    <p>
-      This website is only one part of a whole application, so to see how the
-      backend works feel free to visit our GitHub page! 😃
-    </p>
-    <h2>Links</h2>
-    <p>
-      GitHub:
-      <a class="text-blue" href="https://github.com/HTW-KBE-G4"
-        >https://github.com/HTW-KBE-G4</a
-      >
-    </p>
-    <p>
-      API:
-      <a class="text-blue" :href="api">{{ api }}</a>
-    </p>
+  <div class="page">
+    <q-card class="general">
+      <h1 class="topic">What is "Tanuki Hardware Store"?</h1>
+      <p>
+        <strong>"Tanuki Hardware Store"</strong> is a university project that
+        aims to show how to build a component-based application. This means
+        instead of following a monolithic design stategy, every important task
+        is outsourced to a microservice, creating a microservice system where
+        services are only minimally interdependent and should be individually
+        exchangable/upgradable.
+      </p>
+      <p>
+        This website is only one part of a whole application, so to see how the
+        backend works feel free to visit our GitHub page! 😃
+      </p>
+      <h2>Links</h2>
+      <p>
+        API:
+        <a class="text-blue" :href="api">{{ api }}</a>
+      </p>
+      <p>
+        GitHub:
+        <a class="text-blue" href="https://github.com/HTW-KBE-G4"
+          >https://github.com/HTW-KBE-G4</a
+        >
+      </p>
+    </q-card>
   </div>
-  <q-page class="privacy">
+  <q-page class="page privacy">
     <h1 class="topic">Privacy Policy</h1>
     <p>Last updated: June 14, 2022</p>
     <p>
@@ -505,18 +507,30 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.general {
-  margin-left: 5%;
-  margin-right: 5%;
-  margin-bottom: 60px;
+.page {
+  padding-left: 5vw;
+  padding-right: 5vw;
+  margin-bottom: 50px;
   font-size: 16px;
 }
+.general {
+  width: fit-content;
+  height: fit-content;
+  margin-top: 5vh;
+  padding: 2vw;
+  box-shadow: 0px 0px 50px 2px rgb(0, 0, 0, 0.2);
+  border-radius: 14px;
+}
 .privacy {
-  margin-left: 5%;
-  margin-right: 5%;
-  margin-bottom: 50px;
+  margin-top: 80px;
   height: 100%;
-  font-size: 16px;
+}
+.topic {
+  text-align: center;
+  font-weight: bold;
+  font-size: 50px;
+  margin-top: 0px;
+  margin-bottom: 50px;
 }
 h1 {
   font-size: 40px;
@@ -529,11 +543,5 @@ h2 {
 h3 {
   font-weight: bold;
   font-size: 20px;
-}
-
-.topic {
-  font-weight: bold;
-  font-size: 50px;
-  margin-bottom: 20px;
 }
 </style>
