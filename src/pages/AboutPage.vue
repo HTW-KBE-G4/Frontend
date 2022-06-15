@@ -17,11 +17,21 @@
       <h2>Links</h2>
       <p>
         API:
-        <a class="text-blue" :href="api">{{ api }}</a>
+        <a
+          class="text-blue"
+          target="_blank"
+          rel="noopener noreferrer"
+          :href="api"
+          >{{ api }}</a
+        >
       </p>
       <p>
         GitHub:
-        <a class="text-blue" href="https://github.com/HTW-KBE-G4"
+        <a
+          class="text-blue"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://github.com/HTW-KBE-G4"
           >https://github.com/HTW-KBE-G4</a
         >
       </p>

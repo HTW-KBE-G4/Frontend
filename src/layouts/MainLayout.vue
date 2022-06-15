@@ -82,7 +82,12 @@
       "
     >
       <q-tabs no-caps>
-        <a class="q-ma-sm q-pr-md" href="https://github.com/HTW-KBE-G4">
+        <a
+          class="q-ma-sm q-pr-md"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://github.com/HTW-KBE-G4"
+        >
           <q-avatar
             size="32px"
             v-bind:style="
@@ -95,7 +100,9 @@
           </q-avatar>
         </a>
         <a
+          target="_blank"
           class="text-grey-9 text-subtitle2"
+          rel="noopener noreferrer"
           href="https://www.flaticon.com/free-icons/raccoon"
           title="raccoon icons"
           >Raccoon icons created by Freepik - Flaticon</a
