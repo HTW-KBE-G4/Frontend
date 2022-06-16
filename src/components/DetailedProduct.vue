@@ -1,12 +1,16 @@
 <template>
-  <q-dialog v-model="show" persistent square @shake="$router.push('/products')"
+  <q-dialog
+    transition-show="fade"
+    v-model="show"
+    persistent
+    @shake="$router.push('/products')"
     ><q-card style="max-width: 75vh" v-if="product">
       <q-toolbar class="bg-accent text-white">
-        <q-item-label class="text-subtitle1">{{ product.name }} </q-item-label>
+        <q-item-label class="text-h6">{{ product.name }} </q-item-label>
         <q-space />
         <q-btn dense flat icon="close" @click="$router.push('/products')" />
       </q-toolbar>
-      <div class="q-ma-sm q-gutter-md row">
+      <div class="q-ma-sm q-mb-lg q-gutter-md row">
         <q-card-section class="text-h5" horizontal style="width: 100%">
           <div class="q-mr-md">Total:</div>
           <div class="text-positive">{{ formattedPrice }}</div>

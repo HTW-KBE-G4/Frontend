@@ -2,24 +2,36 @@
   <q-layout view="hHh Lpr fFf">
     <q-header elevated>
       <q-toolbar class="shadow-2 rounded-borders">
-        <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
+        <q-btn
+          style="margin-right: 8em"
+          flat
+          @click="drawer = !drawer"
+          round
+          dense
+          icon="menu"
+        />
         <q-toolbar-title class="text-center">
-          <q-avatar size="65px" class="q-ma-xs q-mr-md">
+          <q-avatar size="65px" class="q-mr-md">
             <img src="/favicon.ico" />
           </q-avatar>
           Tanuki Hardware Store
         </q-toolbar-title>
         <q-btn
-          class="bg-white text-dark q-mr-md"
+          class="bg-primary text-white q-mr-md"
+          flat
           round
           dense
           :icon="$q.dark.isActive ? 'light_mode' : 'dark_mode'"
           @click="toggleDarkMode"
         />
         <q-btn-dropdown
-          class="bg-white text-black q-ma-sm"
-          text-primary
-          style="width: 5em"
+          class="text-white q-ma-sm"
+          flat
+          style="
+            width: 5em;
+            outline: 8px ridge rgba(170, 50, 220, 0.6);
+            border-radius: 1rem;
+          "
           v-bind:label="getCurrencySymbol(currency)"
         >
           <q-list>
@@ -54,14 +66,13 @@
           @click="onMenuItemClick(item.path)"
         />
       </q-list>
-      <q-separator />
       <q-btn
         class="q-ma-md absolute-bottom-left"
         icon="logout"
         rounded
         color="negative"
         label="Logout"
-        @click="logout"
+        @click="logout()"
       />
     </q-drawer>
     <q-footer
@@ -71,7 +82,12 @@
       "
     >
       <q-tabs no-caps>
-        <a class="q-ma-sm q-pr-md" href="https://github.com/HTW-KBE-G4">
+        <a
+          class="q-ma-sm q-pr-md"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://github.com/HTW-KBE-G4"
+        >
           <q-avatar
             size="32px"
             v-bind:style="
@@ -84,7 +100,9 @@
           </q-avatar>
         </a>
         <a
-          class="text-grey text-subtitle2"
+          target="_blank"
+          class="text-grey-9 text-subtitle2"
+          rel="noopener noreferrer"
           href="https://www.flaticon.com/free-icons/raccoon"
           title="raccoon icons"
           >Raccoon icons created by Freepik - Flaticon</a
@@ -184,16 +202,16 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+::-webkit-scrollbar-track {
+  border-radius: 0.125rem;
+  background-color: lightgray;
+}
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 0.25rem;
+  border-radius: 0.125rem;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: $selected;
-  width: 1px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: $primary;
+  border-radius: 0.125rem;
+  background-color: gray;
 }
 </style>

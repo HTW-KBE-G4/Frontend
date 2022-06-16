@@ -1,5 +1,9 @@
 <template>
-  <q-card class="general-card" square>
+  <q-card
+    v-ripple.early.center="{ color: 'blue' }"
+    inset-shadow-down
+    class="general-card"
+  >
     <q-img no-spinner width="22vh" height="22vh" :src="imageUrl" />
     <q-card-section
       class="general-name row justify-center items-center text-center"
@@ -50,6 +54,8 @@ export default defineComponent({
 .general-card {
   max-width: 22vh;
   max-height: 38vh;
+  box-shadow: 1px 1px 16px rgb(0, 0, 0, 0.2);
+  border-radius: 12px;
 }
 
 .general-name {

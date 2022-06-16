@@ -12,9 +12,13 @@
       <div v-if="loading" class="text-subtitle1">
         <q-spinner-ball color="primary" size="2em" />
       </div>
-      <q-card class="create-card row justify-center items-center no-box-shadow">
+      <q-card
+        v-ripple.early
+        class="create-card row justify-center items-center no-box-shadow"
+        @click="createProduct()"
+      >
         <q-card-section class="text-center">
-          <q-btn flat round class="create-button" @click="createProduct()">
+          <q-btn flat round class="create-button">
             <q-icon color="grey" size="4em" name="control_point" />
           </q-btn>
         </q-card-section>
@@ -83,5 +87,10 @@ export default defineComponent({
   outline-style: dashed;
   width: 22vh;
   height: 38vh;
+  border-radius: 12px;
+
+  &:hover {
+    opacity: 0.6;
+  }
 }
 </style>

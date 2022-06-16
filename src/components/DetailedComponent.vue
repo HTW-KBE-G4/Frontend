@@ -1,5 +1,10 @@
 <template>
-  <q-dialog v-model="show" square persistent @shake="$router.back()">
+  <q-dialog
+    transition-show="fade"
+    v-model="show"
+    persistent
+    @shake="$router.back()"
+  >
     <q-card style="max-height: 90vh" v-if="component">
       <q-toolbar class="bg-accent text-white">
         <q-item-label class="text-h6"
@@ -11,44 +16,50 @@
       <q-card-section>
         <q-img no-spinner width="50vh" :src="component.imageUrl"></q-img>
       </q-card-section>
-      <q-card-section>
-        <div class="text-h6">
+      <q-card-section class="text-center">
+        <a class="text-h4">
           {{ component.productName }}
-        </div></q-card-section
+        </a></q-card-section
       >
+      <q-separator inset />
       <q-card-section>
-        <q-item-label class="text-subtitle2">Price:</q-item-label>
-        <q-item-label class="text-positive">{{ formattedPrice }}</q-item-label>
+        <q-item-label class="property"
+          >Price:
+          <a class="text-positive">{{ formattedPrice }}</a></q-item-label
+        >
       </q-card-section>
       <q-card-section>
-        <q-item-label class="text-subtitle2">Description:</q-item-label>
-        <q-item-label class="text-grey">{{
-          component.description
-        }}</q-item-label>
+        <q-item-label class="property"
+          >Description:
+          <a class="value">{{ component.description }}</a></q-item-label
+        >
       </q-card-section>
       <q-card-section>
-        <q-item-label class="text-subtitle2">Model:</q-item-label>
-        <q-item-label class="text-grey">{{ component.model }}</q-item-label>
+        <q-item-label class="property"
+          >Model: <a class="value">{{ component.model }}</a></q-item-label
+        >
       </q-card-section>
       <q-card-section>
-        <q-item-label class="text-subtitle2">Manufacturer:</q-item-label>
-        <q-item-label class="text-grey">{{
-          component.manufacturer
-        }}</q-item-label>
+        <q-item-label class="property"
+          >Manufacturer:
+          <a class="value">{{ component.manufacturer }}</a></q-item-label
+        >
       </q-card-section>
       <q-card-section>
-        <q-item-label class="text-subtitle2">Release Date:</q-item-label>
-        <q-item-label class="text-grey">{{
-          component.releaseDate
-        }}</q-item-label>
+        <q-item-label class="property"
+          >Release Date:
+          <a class="value">{{ component.releaseDate }}</a></q-item-label
+        >
       </q-card-section>
       <q-card-section>
-        <q-item-label class="text-subtitle2">Weight:</q-item-label>
-        <q-item-label class="text-grey">{{ component.weight }}</q-item-label>
+        <q-item-label class="property"
+          >Weight: <a class="value">{{ component.weight }}</a></q-item-label
+        >
       </q-card-section>
       <q-card-section>
-        <q-item-label class="text-subtitle2">EAN:</q-item-label>
-        <q-item-label class="text-grey">{{ component.ean }}</q-item-label>
+        <q-item-label class="property"
+          >EAN: <a class="value">{{ component.ean }}</a></q-item-label
+        >
       </q-card-section>
     </q-card>
   </q-dialog>
@@ -97,3 +108,14 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss">
+.property {
+  font-size: medium;
+  font-weight: 450;
+}
+.value {
+  font-weight: normal;
+  color: grey;
+}
+</style>
