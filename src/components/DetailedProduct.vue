@@ -30,8 +30,8 @@ import { computed, defineComponent, ref } from 'vue';
 import GeneralCard from './GeneralCard.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useCurrencyStore } from 'src/stores/currency';
-import { Notify } from 'quasar';
 import { useProductStore, Product } from 'src/stores/product';
+import { displayNotification } from 'src/utils';
 
 const product = ref<Product>();
 
@@ -51,10 +51,10 @@ export default defineComponent({
       const id = parseInt(route.params.id as string);
       product.value = await useProductStore().get(id, currencyStore.currency);
     } catch (error) {
-      Notify.create({
-        type: 'negative',
-        message: 'Product could not be loaded or does not exist',
-      });
+      displayNotification(
+        'Product could not be loaded or does not exist',
+        true
+      );
       router.push('/products');
     }
 

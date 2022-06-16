@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 
+const defaultCurrency = 'USD';
 const defaultLocale = 'en';
 const predefinedCurrencies = ['USD', 'GBP', 'SEK', 'EUR', 'JPY'];
 
@@ -53,29 +54,42 @@ export const useCurrencyStore = defineStore('currency', {
 
     // Source: https://stackoverflow.com/a/53749034
     getCurrencySymbol(currency: string): string {
-      const locale = getLocaleFromCurrency(currency);
-      const symbol = (0)
-        .toLocaleString(locale, {
-          style: 'currency',
-          currency: currency,
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 0,
-        })
-        .replace(/\d/g, '')
-        .trim();
-      return symbol ? symbol : 'n/a';
+      try {
+        const locale = getLocaleFromCurrency(currency);
+        const symbol = (0)
+          .toLocaleString(locale, {
+            style: 'currency',
+            currency: currency,
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })
+          .replace(/\d/g, '')
+          .trim();
+        return symbol ? symbol : 'n/a';
+      } catch {
+        this.resetCurrency();
+        return this.getCurrencySymbol(defaultCurrency);
+      }
     },
 
     formatPrice(price: number): string {
-      const locale = getLocaleFromCurrency(this.currency);
-      const formatted = new Intl.NumberFormat(locale, {
-        style: 'currency',
-        currency: this.currency,
-      }).format(price);
+      try {
+        const locale = getLocaleFromCurrency(this.currency);
+        const formatted = new Intl.NumberFormat(locale, {
+          style: 'currency',
+          currency: this.currency,
+        }).format(price);
+        return formatted
+          ? formatted
+          : price + this.getCurrencySymbol(this.currency);
+      } catch {
+        this.resetCurrency();
+        return this.formatPrice(price);
+      }
+    },
 
-      return formatted
-        ? formatted
-        : price + this.getCurrencySymbol(this.currency);
+    resetCurrency() {
+      this.change(defaultCurrency);
     },
   },
 });

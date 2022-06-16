@@ -40,14 +40,12 @@
         </div>
       </q-card-section>
       <q-separator></q-separator>
-      <!--<q-card-section>
-        <div class="q-mr-md text-subtitle1">Add a name:</div>
-        <q-input v-model="input" label="Type something..." />
+      <q-card-section>
+        <q-input outlined v-model="nameInput" label="Add a name..." />
       </q-card-section>
-       -->
       <q-card-actions class="q-ma-sm" align="right">
         <q-btn
-          :disable="selectedComponents.length === 0"
+          :disable="selectedComponents.length <= 0 || nameInput.length <= 0"
           :loading="loadingCreate"
           icon-right="add"
           color="positive"
@@ -64,12 +62,12 @@
 import { defineComponent, ref, watch } from 'vue';
 import GeneralCard from './GeneralCard.vue';
 import { useCurrencyStore } from 'src/stores/currency';
-import { Notify } from 'quasar';
 import { useProductStore } from 'src/stores/product';
 import {
   HardwareComponent,
   useComponentStore,
 } from 'src/stores/hardwareComponent';
+import { displayNotification } from 'src/utils';
 
 const selectableComponentList = ref<SelectableComponent[]>([]);
 const isLoading = ref<boolean>(true);
@@ -87,10 +85,7 @@ async function loadComponents(currency: string) {
       selected: false,
     }));
   } catch (error) {
-    Notify.create({
-      type: 'negative',
-      message: 'Hardware components could not be fetched',
-    });
+    displayNotification('Hardware components could not be fetched', true);
   }
   isLoading.value = false;
 }
@@ -112,19 +107,15 @@ export default defineComponent({
     async createProduct() {
       const productStore = useProductStore();
       this.loadingCreate = true;
-      if (this.selectedComponents.length >= 0) {
+      const components = this.selectedComponents;
+      const name = this.nameInput;
+      if (components.length > 0 && name.length > 0 && name.length <= 50) {
         try {
-          await productStore.create(this.selectedComponents);
-          Notify.create({
-            type: 'positive',
-            message: 'New Product created',
-          });
+          await productStore.create(name, components);
+          displayNotification('New Product created', false);
           this.$router.push('/products');
         } catch (error) {
-          Notify.create({
-            type: 'negative',
-            message: 'Product could not be created',
-          });
+          displayNotification('Product could not be created', true);
         }
       }
       this.loadingCreate = false;
@@ -154,7 +145,7 @@ export default defineComponent({
       show: ref(true),
       loadingCreate: ref(false),
       loadingComponents: isLoading,
-      //input: ref(''),
+      nameInput: ref(''),
       selectableComponents: selectableComponentList,
     };
   },

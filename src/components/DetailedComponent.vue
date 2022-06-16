@@ -55,7 +55,6 @@
 </template>
 
 <script lang="ts">
-import { Notify } from 'quasar';
 import { computed, defineComponent, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useCurrencyStore } from 'src/stores/currency';
@@ -63,6 +62,7 @@ import {
   useComponentStore,
   HardwareComponent,
 } from 'src/stores/hardwareComponent';
+import { displayNotification } from 'src/utils';
 
 const component = ref<HardwareComponent>();
 
@@ -81,10 +81,7 @@ export default defineComponent({
         currencyStore.currency
       );
     } catch (error) {
-      Notify.create({
-        type: 'negative',
-        message: 'Hardware Component does not exist',
-      });
+      displayNotification('Hardware Component does not exist', true);
       router.back();
     }
 

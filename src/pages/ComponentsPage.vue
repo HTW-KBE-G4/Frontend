@@ -25,10 +25,10 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
-import { Notify } from 'quasar';
 import GeneralCard from 'components/GeneralCard.vue';
 import { useCurrencyStore } from 'src/stores/currency';
 import { useComponentStore } from 'src/stores/hardwareComponent';
+import { displayNotification } from 'src/utils';
 
 const currencyStore = useCurrencyStore();
 const isLoading = ref<boolean>(true);
@@ -37,10 +37,7 @@ async function loadComponents(currency: string) {
   try {
     await useComponentStore().getAll(currency);
   } catch (error) {
-    Notify.create({
-      type: 'negative',
-      message: 'Hardware components could not be fetched',
-    });
+    displayNotification('Hardware components could not be fetched', true);
   }
   isLoading.value = false;
 }
