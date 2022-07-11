@@ -1,6 +1,7 @@
 import { boot } from 'quasar/wrappers';
 import VueKeyCloak from '@dsb-norge/vue-keycloak-js';
 import axios from 'axios';
+import { VueKeycloakInstance } from '@dsb-norge/vue-keycloak-js/dist/types';
 
 export default boot(async ({ app, router, store }) => {
   async function tokenInterceptor() {
@@ -30,10 +31,16 @@ export default boot(async ({ app, router, store }) => {
         realm: 'Tanuki-Realm',
         clientId: 'frontend-client',
       },
-      onReady: (keycloak) => {
+      onReady: (keycloak: VueKeycloakInstance) => {
         tokenInterceptor();
         resolve();
       },
     });
   });
 });
+
+declare module '@vue/runtime-core' {
+  interface ComponentCustomProperties {
+    $keycloak: VueKeycloakInstance;
+  }
+}
