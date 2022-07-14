@@ -35,8 +35,12 @@ export const useComponentStore = defineStore('components', {
       if (component && this.loadedCurrency === currency) {
         return component;
       } else {
-        const url = `components/${id}/?currency=${currency}`;
-        const response = await api.get<HardwareComponent>(url);
+        const url = `components/${id}?currency=${currency}`;
+        const response = await api.get<HardwareComponent>(url, {
+          headers: {
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
         this.$patch({
           loadedCurrency: currency,
         });
@@ -48,8 +52,12 @@ export const useComponentStore = defineStore('components', {
       if (this.isUpToDate && this.loadedCurrency === currency) {
         return this.components;
       } else {
-        const url = `components/?currency=${currency}`;
-        const response = await api.get<HardwareComponent[]>(url);
+        const url = `components?currency=${currency}`;
+        const response = await api.get<HardwareComponent[]>(url, {
+          headers: {
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
         this.$patch({
           components: response.data as HardwareComponent[],
           isUpToDate: true,

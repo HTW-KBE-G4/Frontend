@@ -1,19 +1,19 @@
 import { boot } from 'quasar/wrappers';
 import VueKeyCloak from '@dsb-norge/vue-keycloak-js';
-import axios from 'axios';
+import { AxiosRequestConfig } from 'axios';
+import { api } from './axios';
 import { VueKeycloakInstance } from '@dsb-norge/vue-keycloak-js/dist/types';
 
 export default boot(async ({ app, router, store }) => {
   async function tokenInterceptor() {
-    axios.interceptors.request.use(
-      (config) => {
-        config.headers.Authorization = `Bearer ${app.config.globalProperties.$keycloak.token}`;
-        return config;
-      },
-      (error) => {
-        return Promise.reject(error);
-      }
-    );
+    api.interceptors.request.use((config: AxiosRequestConfig) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-template-expressions
+    config.headers['Authorization'] = `Bearer ${app.config.globalProperties.$keycloak.token}`
+    
+    return config
+  }, error => {
+    return Promise.reject(error)
+  }) //null, { synchronous: true })
   }
 
   return new Promise((resolve) => {

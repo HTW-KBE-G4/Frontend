@@ -26,7 +26,11 @@ export const useProductStore = defineStore('products', {
 
     async create(name: string, components: HardwareComponent[]) {
       const data = { name: name, components: components };
-      await api.post('products/create', data).then(async () => {
+      await api.post('products/create', data, {
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      }).then(async () => {
         this.isUpToDate = false;
         await this.getAll(this.loadedCurrency);
       });
@@ -38,7 +42,7 @@ export const useProductStore = defineStore('products', {
       if (product && this.loadedCurrency === currency) {
         return product;
       } else {
-        const url = `products/${id}/?currency=${currency}`;
+        const url = `products/${id}?currency=${currency}`;
         const response = await api.get<Product>(url);
         this.$patch({
           loadedCurrency: currency,
@@ -51,7 +55,7 @@ export const useProductStore = defineStore('products', {
       if (this.isUpToDate && this.loadedCurrency === currency) {
         return this.products;
       } else {
-        const url = `products/?currency=${currency}`;
+        const url = `products?currency=${currency}`;
         const response = await api.get<Product[]>(url);
         this.$patch({
           products: response.data,
