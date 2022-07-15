@@ -121,6 +121,7 @@ import { defineComponent, ref } from 'vue';
 import { useQuasar } from 'quasar';
 import MenuItem from 'components/MenuItem.vue';
 import { useCurrencyStore } from 'stores/currency';
+import { KeycloakInstance } from '@dsb-norge/vue-keycloak-js/dist/types';
 
 const menuItemList = [
   {
@@ -145,7 +146,6 @@ const currencyList = ref<string[]>([]);
 
 export default defineComponent({
   name: 'MainLayout',
-
   components: { MenuItem },
 
   methods: {
@@ -164,8 +164,8 @@ export default defineComponent({
     },
 
     logout() {
-      //keycloak.logout;
-      console.log('Logged out');
+      const logoutOptions = { redirectUri: window.location.origin };
+      this.$keycloak.keycloak?.logout(logoutOptions);
     },
 
     toggleDarkMode() {
@@ -176,7 +176,6 @@ export default defineComponent({
 
   async setup() {
     const $q = useQuasar();
-
     currencyList.value = currencyStore.currencies;
 
     const savedMode = localStorage.getItem('darkMode');
