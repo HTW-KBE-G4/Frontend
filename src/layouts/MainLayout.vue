@@ -121,7 +121,6 @@ import { defineComponent, ref } from 'vue';
 import { useQuasar } from 'quasar';
 import MenuItem from 'components/MenuItem.vue';
 import { useCurrencyStore } from 'stores/currency';
-import { KeycloakInstance } from '@dsb-norge/vue-keycloak-js/dist/types';
 
 const menuItemList = [
   {

@@ -36,11 +36,7 @@ export const useComponentStore = defineStore('components', {
         return component;
       } else {
         const url = `components/${id}?currency=${currency}`;
-        const response = await api.get<HardwareComponent>(url, {
-          headers: {
-            'Access-Control-Allow-Origin': '*'
-          }
-        });
+        const response = await api.get<HardwareComponent>(url);
         this.$patch({
           loadedCurrency: currency,
         });
@@ -53,11 +49,7 @@ export const useComponentStore = defineStore('components', {
         return this.components;
       } else {
         const url = `components?currency=${currency}`;
-        const response = await api.get<HardwareComponent[]>(url, {
-          headers: {
-            'Access-Control-Allow-Origin': '*'
-          }
-        });
+        const response = await api.get<HardwareComponent[]>(url);
         this.$patch({
           components: response.data as HardwareComponent[],
           isUpToDate: true,
