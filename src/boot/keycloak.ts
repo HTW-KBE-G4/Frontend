@@ -4,16 +4,20 @@ import { AxiosRequestConfig } from 'axios';
 import { api } from './axios';
 import { VueKeycloakInstance } from '@dsb-norge/vue-keycloak-js/dist/types';
 
-export default boot(async ({ app, router, store }) => {
+export default boot(async ({ app }) => {
   async function tokenInterceptor() {
-    api.interceptors.request.use((config: AxiosRequestConfig) => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-template-expressions
-    config.headers['Authorization'] = `Bearer ${app.config.globalProperties.$keycloak.token}`
-    
-    return config
-  }, error => {
-    return Promise.reject(error)
-  }) //null, { synchronous: true })
+    api.interceptors.request.use(
+      (config: AxiosRequestConfig) => {
+        config.headers[
+          'Authorization'
+        ] = `Bearer ${app.config.globalProperties.$keycloak.token}`;
+
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    ); //null, { synchronous: true })
   }
 
   return new Promise((resolve) => {
@@ -27,11 +31,13 @@ export default boot(async ({ app, router, store }) => {
         checkLoginIframe: false,
       },
       config: {
-        url: 'http://localhost:8080/auth',
+        url: 'http://localhost:8090/auth',
         realm: 'Tanuki-Realm',
         clientId: 'frontend-client',
+
+        'enable-cors': true,
       },
-      onReady: (keycloak: VueKeycloakInstance) => {
+      onReady: () => {
         tokenInterceptor();
         resolve();
       },

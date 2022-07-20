@@ -6,8 +6,8 @@ export interface Product {
   id: number;
   name: string;
   components: HardwareComponent[];
-  price: number;
-  imageUrl: string;
+  uvp: number;
+  image_url: string;
 }
 
 export const useProductStore = defineStore('products', {
@@ -26,11 +26,7 @@ export const useProductStore = defineStore('products', {
 
     async create(name: string, components: HardwareComponent[]) {
       const data = { name: name, components: components };
-      await api.post('products/create', data, {
-        headers: {
-          'Access-Control-Allow-Origin': '*'
-        }
-      }).then(async () => {
+      await api.post('products/create', data).then(async () => {
         this.isUpToDate = false;
         await this.getAll(this.loadedCurrency);
       });
