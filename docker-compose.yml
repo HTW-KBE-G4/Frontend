@@ -1,4 +1,4 @@
-version: '3'
+version: '3.5'
 services:
   quasar:
     container_name: quasar
@@ -10,8 +10,3 @@ services:
     volumes:
       - '.:/app'
     command: /bin/sh -c "npm install && quasar dev"
-    #networks:
-    # - test
-#networks:
-# test:
-#  external: true

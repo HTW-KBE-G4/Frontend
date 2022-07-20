@@ -31,9 +31,11 @@ export default boot(async ({ app }) => {
         checkLoginIframe: false,
       },
       config: {
-        url: 'http://localhost:8080/auth',
+        url: 'http://localhost:8090/auth',
         realm: 'Tanuki-Realm',
         clientId: 'frontend-client',
+
+        'enable-cors': true,
       },
       onReady: () => {
         tokenInterceptor();

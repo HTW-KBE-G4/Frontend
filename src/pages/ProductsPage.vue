@@ -5,8 +5,8 @@
         v-for="product in products"
         :key="product.id"
         :name="product.name"
-        :image-url="product.imageUrl"
-        :price="product.price"
+        :image-url="product.image_url"
+        :price="product.uvp"
         @click="showDetails(product.id)"
       ></GeneralCard>
       <div v-if="loading" class="text-subtitle1">
