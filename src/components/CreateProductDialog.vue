@@ -20,7 +20,7 @@
       <q-card-section class="q-gutter-md row scroll" style="max-height: 50vh">
         <GeneralCard
           v-for="selectable in selectableComponents"
-          :key="selectable.component.id"
+          :key="selectable.component.component_id"
           :name="selectable.component.productName"
           :image-url="selectable.component.imageUrl"
           :price="selectable.component.uvp"

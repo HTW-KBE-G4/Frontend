@@ -19,7 +19,7 @@ const routes: RouteRecordRaw[] = [
         component: ProductsPage,
         children: [
           {
-            path: ':id',
+            path: ':product_id',
             component: DetailedProduct,
             children: [
               {
@@ -39,7 +39,7 @@ const routes: RouteRecordRaw[] = [
         component: ComponentsPage,
         children: [
           {
-            path: ':id',
+            path: ':component_id',
             component: DetailedComponent,
           },
         ],

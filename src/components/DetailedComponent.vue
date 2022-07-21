@@ -86,7 +86,7 @@ export default defineComponent({
     const currencyStore = useCurrencyStore();
 
     try {
-      const id = parseInt(route.params.id as string);
+      const id = parseInt(route.params.component_id as string);
       component.value = await useComponentStore().get(
         id,
         currencyStore.currency

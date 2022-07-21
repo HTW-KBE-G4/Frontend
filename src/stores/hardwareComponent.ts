@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { api } from 'src/boot/axios';
 
 export interface HardwareComponent {
-  id: number;
+  component_id: number;
   type: string;
   model: string;
   description: string;
@@ -26,7 +26,7 @@ export const useComponentStore = defineStore('components', {
 
   actions: {
     findComponent(id: number) {
-      return this.components.find((component) => component.id === id);
+      return this.components.find((component) => component.component_id === id);
     },
 
     async get(id: number, currency: string): Promise<HardwareComponent> {

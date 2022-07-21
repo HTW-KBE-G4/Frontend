@@ -3,11 +3,11 @@
     <div class="q-ma-sm q-gutter-md row">
       <GeneralCard
         v-for="component in components"
-        :key="component.id"
+        :key="component.component_id"
         :name="component.productName"
         :image-url="component.imageUrl"
         :price="component.uvp"
-        @click="showDetails(component.id)"
+        @click="showDetails(component.component_id)"
       ></GeneralCard>
       <div
         v-if="components.length === 0 && !loading"

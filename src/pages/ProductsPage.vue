@@ -3,11 +3,11 @@
     <div class="q-ma-sm q-gutter-md row">
       <GeneralCard
         v-for="product in products"
-        :key="product.id"
+        :key="product.product_id"
         :name="product.name"
         :image-url="product.image_url"
         :price="product.uvp"
-        @click="showDetails(product.id)"
+        @click="showDetails(product.product_id)"
       ></GeneralCard>
       <div v-if="loading" class="text-subtitle1">
         <q-spinner-ball color="primary" size="2em" />
