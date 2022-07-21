@@ -3,7 +3,7 @@ import { api } from 'src/boot/axios';
 import { HardwareComponent } from './hardwareComponent';
 
 export interface Product {
-  id: number;
+  product_id: number;
   name: string;
   components: HardwareComponent[];
   uvp: number;
@@ -21,7 +21,7 @@ export const useProductStore = defineStore('products', {
 
   actions: {
     findProduct(id: number) {
-      return this.products.find((product) => product.id === id);
+      return this.products.find((product) => product.product_id === id);
     },
 
     async create(name: string, components: HardwareComponent[]) {

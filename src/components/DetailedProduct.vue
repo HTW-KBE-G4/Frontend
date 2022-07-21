@@ -17,11 +17,11 @@
         </q-card-section>
         <GeneralCard
           v-for="component in product.components"
-          :key="component.id"
+          :key="component.component_id"
           :name="component.productName"
           :image-url="component.imageUrl"
           :price="component.uvp"
-          @click="showDetails(product!.id, component.id)"
+          @click="showDetails(product!.product_id, component.component_id)"
         ></GeneralCard>
       </div>
     </q-card>
@@ -52,7 +52,7 @@ export default defineComponent({
     const currencyStore = useCurrencyStore();
 
     try {
-      const id = parseInt(route.params.id as string);
+      const id = parseInt(route.params.product_id as string);
       product.value = await useProductStore().get(id, currencyStore.currency);
     } catch (error) {
       displayNotification(
@@ -63,7 +63,7 @@ export default defineComponent({
     }
 
     const formattedPrice = computed<string>(() =>
-      currencyStore.formatPrice(product.value?.price || 0)
+      currencyStore.formatPrice(product.value?.uvp || 0)
     );
 
     return {
