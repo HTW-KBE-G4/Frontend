@@ -92,15 +92,15 @@ module.exports = configure(function (ctx) {
           : 8000,
       proxy: 'http://localhost:80',
       open: true, // opens browser window automatically
-      before (app) {
-        const cors = require('cors')
-      
-        app.options('*',cors())
-        app.use(cors())
+      before(app) {
+        const cors = require('cors');
+
+        app.options('*', cors());
+        app.use(cors());
       },
       headers: {
         'Access-Control-Allow-Origin': '*',
-      }
+      },
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
