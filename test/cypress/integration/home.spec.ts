@@ -6,10 +6,14 @@
 // This test will pass when run against a clean Quasar project
 
 describe('Keycloak Fake Login', () => {
-  beforeEach(() => {
+  /*beforeEach(() => {
     cy.kcFakeLogin('user');
     cy.wait(30000);
     cy.visit('/products');
+  });*/
+  beforeEach(() => {
+    cy.visit('/');
+    cy.wait(20000);
   });
   it('.should() - assert that <title> is correct', () => {
     cy.title().should('include', 'Tanuki');
