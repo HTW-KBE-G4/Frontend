@@ -1,5 +1,5 @@
 <template>
-  <q-page
+  <q-page data-cy="products-page"
     ><div class="q-pa-sm" v-if="product">
       <q-toolbar>
         <q-btn

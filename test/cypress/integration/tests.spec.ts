@@ -20,10 +20,7 @@ const mockComponent: HardwareComponent = {
   imageUrl: 'MOCK',
 };
 
-const mockComponents: HardwareComponent[] = new Array(5).fill(mockComponent);
-
-const mockComponentJSON = JSON.stringify(mockComponent);
-const mockComponentsJSON = JSON.stringify(mockComponents);
+const mockComponents: HardwareComponent[] = new Array(10).fill(mockComponent);
 
 const mockProduct: Product = {
   product_id: 1,
@@ -36,7 +33,6 @@ const mockProduct: Product = {
 const mockProducts: Product[] = new Array(5).fill(mockProduct);
 
 const mockProductJSON = JSON.stringify(mockProduct);
-const mockProductsJSON = JSON.stringify(mockProducts);
 
 const mockID = 1;
 
@@ -73,7 +69,11 @@ describe('Components Page', () => {
       .should('have.length', mockComponents.length);
   });
   it('Component is clickable and shows dialog', () => {
-    cy.get('.q-gutter-md').children().get('.q-card').eq(mockID).click();
+    cy.get('.q-gutter-md')
+      .children()
+      .get('.q-card')
+      .eq(mockID - 1) // -1 because -> index
+      .click();
     cy.get('.q-dialog').should('be.visible');
     cy.url().should('include', mockID);
   });
@@ -86,6 +86,194 @@ describe('Components Page', () => {
     });
   });
 });
+
+describe('Products Page', () => {
+  beforeEach(() => {
+    cy.intercept('GET', `${api}/products*`, {
+      statusCode: 200,
+      body: mockProducts,
+    });
+    cy.intercept('GET', `${api}/products/*`, {
+      statusCode: 200,
+      body: mockProduct,
+    });
+    /*cy.intercept('POST', '/products/create', {
+      statusCode: 200,
+      body: {
+        name: 'MOCK',
+        components: mockComponents,
+      },
+    });*/
+    cy.intercept('GET', `${api}/components*`, {
+      statusCode: 200,
+      body: mockComponents,
+    });
+    cy.visit('/products');
+    cy.wait(1000);
+  });
+  it('Gutter contains the right amount of fetched products', () => {
+    cy.get('.q-gutter-md')
+      .children()
+      .should('have.length', mockProducts.length + 1); //+1 due to 1 "Create Card being present"
+  });
+  it('Product is clickable and redirects to page', () => {
+    cy.get('.q-gutter-md')
+      .children()
+      .get('.q-card')
+      .eq(mockID - 1)
+      .click();
+    cy.get('[data-cy=products-page]')
+      .should('be.visible')
+      .within(() => cy.contains(mockProduct.uvp));
+    cy.url().should('include', mockID);
+  });
+  it('Visiting /products/ID also shows its info + components', () => {
+    cy.visit(`/products/${mockID}`);
+    const page = cy.get('[data-cy=products-page]');
+    page.should('be.visible');
+    page.within(() => {
+      cy.get('.q-gutter-sm')
+        .children()
+        .should('have.length', mockProduct.components.length);
+    });
+  });
+  it('Product creation dialog opens', () => {
+    cy.visit('/products/create');
+    const popUp = cy.get('.q-dialog');
+    popUp.should('be.visible');
+    popUp.within(() => {
+      cy.get('.q-gutter-md')
+        .children()
+        .should('have.length', mockComponents.length);
+      cy.get('.q-input').should('be.visible');
+    });
+  });
+  it('Product creation successfully sends data to API', () => {
+    const name = 'Given Name';
+    cy.visit('/products/create');
+    cy.get('.q-dialog').within(() => {
+      cy.get('.q-gutter-md')
+        .children()
+        .get('.q-card')
+        .eq(mockID - 1)
+        .click();
+      cy.get('[data-cy=name-input]').type(name).should('have.value', name);
+    });
+
+    cy.intercept('POST', `${api}/products/create*`, {
+      statusCode: 200,
+    }).as('createProduct');
+    cy.get('[data-cy=create-button]').click();
+    cy.wait('@createProduct').its('response.statusCode').should('eq', 200);
+
+    cy.get('.q-notification').should('have.class', 'bg-positive'); // -> successful Creation
+  });
+  it('Product cannot be created if name is missing / components are not selected', () => {
+    const name = 'Given Name';
+    let input;
+    cy.visit('/products/create');
+    cy.get('.q-dialog').within(() => {
+      input = cy.get('[data-cy=name-input]');
+      input.type(name).should('have.value', name);
+    });
+
+    cy.get('[data-cy=create-button]').should('not.be.enabled');
+
+    cy.get('[data-cy=name-input]').clear();
+
+    cy.get('.q-dialog').within(() => {
+      cy.get('.q-gutter-md')
+        .children()
+        .get('.q-card')
+        .eq(mockID - 1)
+        .click();
+    });
+
+    cy.get('[data-cy=create-button]').should('not.be.enabled');
+  });
+
+  /*it('Product cannot be created if name is missing / components are not selected', () => {
+    cy.visit('/products/create');
+    cy.intercept('GET', '/products*', {
+      statusCode: 200,
+      body: {
+        mockProducts,
+      },
+    });
+    cy.intercept('GET', '/components*', {
+      statusCode: 200,
+      body: {
+        mockComponents,
+      },
+    });
+    cy.intercept('POST', '/products/create', {
+      statusCode: 200,
+      body: {
+        name: 'MOCK',
+        components: mockComponents,
+      },
+    });
+    cy.visit('/products/create');
+    //check if New Product Created pop up came
+  });*/
+});
+/*
+describe('Products Page', () => {
+  it('Get all products', () => {
+    cy.intercept('GET', '/products*', {
+      statusCode: 200,
+      body: {
+        mockProducts,
+      },
+    });
+    cy.visit('/products');
+    //cy.get('list').length == mockProducts.length;
+  });
+  it('Get one product', () => {
+    cy.intercept('GET', '/products*', {
+      statusCode: 200,
+      body: {
+        mockProducts,
+      },
+    });
+    cy.intercept('GET', '/products/*', {
+      statusCode: 200,
+      body: {
+        mockProduct,
+      },
+    });
+    cy.visit('/products');
+    //cy.get('general-card').click(); //OR cy.visit(`/components/${id}`);
+    //cy.get('general-card').name === ...;
+  });
+});
+
+describe('Product Creation', () => {
+  it('Create a product', () => {
+    cy.visit('/products/create');
+    cy.intercept('GET', '/products*', {
+      statusCode: 200,
+      body: {
+        mockProducts,
+      },
+    });
+    cy.intercept('GET', '/components*', {
+      statusCode: 200,
+      body: {
+        mockComponents,
+      },
+    });
+    cy.intercept('POST', '/products/create', {
+      statusCode: 200,
+      body: {
+        name: 'MOCK',
+        components: mockComponents,
+      },
+    });
+    cy.visit('/products/create');
+    //check if New Product Created pop up came
+  });
+});*/
 
 //TODO products page, switch currencies, about page
 

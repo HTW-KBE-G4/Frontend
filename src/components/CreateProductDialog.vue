@@ -35,6 +35,7 @@
       <q-separator></q-separator>
       <q-card-section>
         <q-input
+          data-cy="name-input"
           color="primary"
           stack-label
           outlined
@@ -44,6 +45,7 @@
       </q-card-section>
       <q-card-actions class="q-ma-sm" align="right">
         <q-btn
+          data-cy="create-button"
           :disable="selectedComponents.length <= 0 || nameInput.length <= 0"
           :loading="loadingCreate"
           icon-right="add"
