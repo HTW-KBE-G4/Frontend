@@ -1,5 +1,6 @@
 <template>
   <q-dialog
+    square
     transition-show="fade"
     v-model="show"
     persistent
@@ -11,7 +12,7 @@
           >{{ component.type }} Details</q-item-label
         >
         <q-space />
-        <q-btn dense flat icon="arrow_back" @click="$router.back()" />
+        <q-btn rounded flat icon="arrow_back" @click="$router.back()" />
       </q-toolbar>
       <q-card-section>
         <q-img no-spinner width="50vh" :src="component.imageUrl"></q-img>
@@ -25,7 +26,7 @@
       <q-card-section>
         <q-item-label class="property"
           >Price:
-          <a class="text-positive">{{ formattedPrice }}</a></q-item-label
+          <a class="value text-positive">{{ formattedPrice }}</a></q-item-label
         >
       </q-card-section>
       <q-card-section>
@@ -116,6 +117,12 @@ export default defineComponent({
 }
 .value {
   font-weight: normal;
+  float: right;
   color: grey;
+}
+
+.round {
+  padding: 1vw;
+  border-radius: 16px;
 }
 </style>

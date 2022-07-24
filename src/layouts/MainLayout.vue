@@ -212,4 +212,8 @@ export default defineComponent({
   border-radius: 0.125rem;
   background-color: gray;
 }
+
+.q-dialog__backdrop {
+  backdrop-filter: blur(3px);
+}
 </style>

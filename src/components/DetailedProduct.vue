@@ -1,31 +1,48 @@
 <template>
-  <q-dialog
-    transition-show="fade"
-    v-model="show"
-    persistent
-    @shake="$router.push('/products')"
-    ><q-card style="max-width: 75vh" v-if="product">
-      <q-toolbar class="bg-accent text-white">
-        <q-item-label class="text-h6">{{ product.name }} </q-item-label>
-        <q-space />
-        <q-btn dense flat icon="close" @click="$router.push('/products')" />
+  <q-page
+    ><div class="q-pa-sm" v-if="product">
+      <q-toolbar>
+        <q-btn
+          class="elevated"
+          rounded
+          flat
+          icon="arrow_back"
+          @click="$router.back()"
+        ></q-btn>
       </q-toolbar>
-      <div class="q-ma-sm q-mb-lg q-gutter-md row">
-        <q-card-section class="text-h5" horizontal style="width: 100%">
-          <div class="q-mr-md">Total:</div>
-          <div class="text-positive">{{ formattedPrice }}</div>
-        </q-card-section>
-        <GeneralCard
-          v-for="component in product.components"
-          :key="component.component_id"
-          :name="component.productName"
-          :image-url="component.imageUrl"
-          :price="component.uvp"
-          @click="showDetails(product!.product_id, component.component_id)"
-        ></GeneralCard>
-      </div>
-    </q-card>
-  </q-dialog>
+      <q-card-section horizontal>
+        <div class="q-ma-md">
+          <div flat class="title">
+            <a class="text-h3">
+              {{ product.name }}
+            </a>
+          </div>
+          <q-card-section>
+            <q-img no-spinner width="50vh" :src="product.image_url"></q-img>
+          </q-card-section>
+          <div class="title q-pa-md text-h5">
+            Total Price: <a class="text-positive">{{ formattedPrice }}</a>
+          </div>
+        </div>
+        <div class="q-mt-md">
+          <div class="text-h5 q-ma-md title">Components:</div>
+          <q-card-section
+            style="max-height: 60vh; max-width: max-content"
+            class="q-gutter-sm q-mt-sm row scroll"
+          >
+            <GeneralCard
+              v-for="component in product.components"
+              :key="component.component_id"
+              :name="component.productName"
+              :image-url="component.imageUrl"
+              :price="component.uvp"
+              @click="showDetails(product!.product_id, component.component_id)"
+            ></GeneralCard>
+          </q-card-section>
+        </div>
+      </q-card-section>
+    </div>
+  </q-page>
   <router-view></router-view>
 </template>
 
@@ -67,7 +84,6 @@ export default defineComponent({
     );
 
     return {
-      show: ref(true),
       product: product,
       formattedPrice,
     };
@@ -75,3 +91,22 @@ export default defineComponent({
   components: { GeneralCard },
 });
 </script>
+
+<style lang="scss">
+.elevated {
+  width: fit-content;
+  height: fit-content;
+  margin: 1vh;
+  padding: 2vh;
+  box-shadow: 0px 0px 40px 1px rgb(0, 0, 0, 0.2);
+  border-radius: 20px;
+}
+.title {
+  margin: auto;
+  text-align: center;
+  max-width: fit-content;
+  max-height: fit-content;
+  padding: 1vh;
+  border-radius: 14px;
+}
+</style>

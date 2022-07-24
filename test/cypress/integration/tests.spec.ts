@@ -57,7 +57,6 @@ describe('Page Loads', () => {
 
 describe('Components Page', () => {
   beforeEach(() => {
-    // Define intercepts
     cy.intercept('GET', `${api}/components*`, {
       statusCode: 200,
       body: mockComponents,

@@ -17,13 +17,13 @@ export default boot(async ({ app }) => {
       (error) => {
         return Promise.reject(error);
       }
-    ); //null, { synchronous: true })
+    );
   }
 
   return new Promise((resolve) => {
     app.use(VueKeyCloak, {
       init: {
-        onLoad: 'login-required', // or 'check-sso'
+        onLoad: 'login-required',
         flow: 'standard',
         pkceMethod: 'S256',
         silentCheckSsoRedirectUri:

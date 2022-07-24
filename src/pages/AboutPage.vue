@@ -529,7 +529,7 @@ export default defineComponent({
   margin-top: 5vh;
   padding: 2vw;
   box-shadow: 0px 0px 50px 2px rgb(0, 0, 0, 0.2);
-  border-radius: 14px;
+  border-radius: 20px;
 }
 .privacy {
   margin-top: 80px;
