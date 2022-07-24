@@ -1,5 +1,5 @@
 <template>
-  <q-dialog v-model="show" persistent>
+  <q-dialog data-cy="create-popup" v-model="show" persistent>
     <q-card style="max-width: 75vh; min-height: 20vh; min-width: 50vh">
       <q-toolbar class="bg-accent text-white">
         <q-item-label class="text-h6 absolute-center"
@@ -17,7 +17,11 @@
         </div>
         <div class="q-mb-md" v-else>Select hardware components:</div>
       </q-card-section>
-      <q-card-section class="q-gutter-md row scroll" style="max-height: 50vh">
+      <q-card-section
+        data-cy="selectable-components"
+        class="q-gutter-md row scroll"
+        style="max-height: 50vh"
+      >
         <GeneralCard
           v-for="selectable in selectableComponents"
           :key="selectable.component.component_id"

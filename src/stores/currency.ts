@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 
-const defaultCurrency = 'USD';
+export const defaultCurrency = 'USD';
 const defaultLocale = 'en';
-const predefinedCurrencies = ['USD', 'GBP', 'SEK', 'EUR', 'JPY'];
+export const predefinedCurrencies = ['USD', 'GBP', 'SEK', 'EUR', 'JPY'];
 
 function getLocaleFromCurrency(currency: string): string {
   let locale;
@@ -36,7 +36,7 @@ function getLocaleFromCurrency(currency: string): string {
 
 export const useCurrencyStore = defineStore('currency', {
   state: () => ({
-    currency: 'USD',
+    currency: defaultCurrency,
   }),
 
   getters: {

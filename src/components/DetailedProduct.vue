@@ -27,6 +27,7 @@
         <div class="q-mt-md">
           <div class="text-h5 q-ma-md title">Components:</div>
           <q-card-section
+            data-cy="product-components"
             style="max-height: 60vh; max-width: max-content"
             class="q-gutter-sm q-mt-sm row scroll"
           >

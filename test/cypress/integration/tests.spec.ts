@@ -2,6 +2,10 @@
 // See https://docs.cypress.io/guides/references/best-practices.html#Selecting-Elements
 //import * as ctx from "../../../quasar.conf.js";
 import { Product } from '../../../src/stores/product';
+import {
+  defaultCurrency,
+  predefinedCurrencies,
+} from '../../../src/stores/currency';
 import { HardwareComponent } from '../../../src/stores/hardwareComponent';
 
 const api = 'http://localhost:8800';
@@ -31,8 +35,6 @@ const mockProduct: Product = {
 };
 
 const mockProducts: Product[] = new Array(5).fill(mockProduct);
-
-const mockProductJSON = JSON.stringify(mockProduct);
 
 const mockID = 1;
 
@@ -64,22 +66,22 @@ describe('Components Page', () => {
     cy.visit('/components');
   });
   it('Gutter contains the right amount of fetched components', () => {
-    cy.get('.q-gutter-md')
+    cy.get('[data-cy=component-gutter]')
       .children()
       .should('have.length', mockComponents.length);
   });
   it('Component is clickable and shows dialog', () => {
-    cy.get('.q-gutter-md')
+    cy.get('[data-cy=component-gutter]')
       .children()
-      .get('.q-card')
+      .get('[data-cy=general-card]')
       .eq(mockID - 1) // -1 because -> index
       .click();
-    cy.get('.q-dialog').should('be.visible');
+    cy.get('[data-cy=detailed-component]').should('be.visible');
     cy.url().should('include', mockID);
   });
   it('Visiting /components/ID also shows dialog with info', () => {
     cy.visit(`/components/${mockID}`);
-    const popUp = cy.get('.q-dialog');
+    const popUp = cy.get('[data-cy=detailed-component]');
     popUp.should('be.visible');
     popUp.within(() => {
       cy.contains(mockComponent.productName);
@@ -97,13 +99,6 @@ describe('Products Page', () => {
       statusCode: 200,
       body: mockProduct,
     });
-    /*cy.intercept('POST', '/products/create', {
-      statusCode: 200,
-      body: {
-        name: 'MOCK',
-        components: mockComponents,
-      },
-    });*/
     cy.intercept('GET', `${api}/components*`, {
       statusCode: 200,
       body: mockComponents,
@@ -112,14 +107,14 @@ describe('Products Page', () => {
     cy.wait(1000);
   });
   it('Gutter contains the right amount of fetched products', () => {
-    cy.get('.q-gutter-md')
+    cy.get('[data-cy=product-gutter]')
       .children()
       .should('have.length', mockProducts.length + 1); //+1 due to 1 "Create Card being present"
   });
   it('Product is clickable and redirects to page', () => {
-    cy.get('.q-gutter-md')
+    cy.get('[data-cy=product-gutter]')
       .children()
-      .get('.q-card')
+      .get('[data-cy=general-card]')
       .eq(mockID - 1)
       .click();
     cy.get('[data-cy=products-page]')
@@ -132,29 +127,29 @@ describe('Products Page', () => {
     const page = cy.get('[data-cy=products-page]');
     page.should('be.visible');
     page.within(() => {
-      cy.get('.q-gutter-sm')
+      cy.get('[data-cy=product-components]')
         .children()
         .should('have.length', mockProduct.components.length);
     });
   });
   it('Product creation dialog opens', () => {
     cy.visit('/products/create');
-    const popUp = cy.get('.q-dialog');
+    const popUp = cy.get('[data-cy=create-popup]');
     popUp.should('be.visible');
     popUp.within(() => {
-      cy.get('.q-gutter-md')
+      cy.get('[data-cy=selectable-components]')
         .children()
         .should('have.length', mockComponents.length);
-      cy.get('.q-input').should('be.visible');
+      cy.get('[data-cy=name-input]').should('be.visible');
     });
   });
   it('Product creation successfully sends data to API', () => {
     const name = 'Given Name';
     cy.visit('/products/create');
-    cy.get('.q-dialog').within(() => {
-      cy.get('.q-gutter-md')
+    cy.get('[data-cy=create-popup]').within(() => {
+      cy.get('[data-cy=selectable-components]')
         .children()
-        .get('.q-card')
+        .get('[data-cy=general-card]')
         .eq(mockID - 1)
         .click();
       cy.get('[data-cy=name-input]').type(name).should('have.value', name);
@@ -172,7 +167,7 @@ describe('Products Page', () => {
     const name = 'Given Name';
     let input;
     cy.visit('/products/create');
-    cy.get('.q-dialog').within(() => {
+    cy.get('[data-cy=create-popup]').within(() => {
       input = cy.get('[data-cy=name-input]');
       input.type(name).should('have.value', name);
     });
@@ -181,138 +176,46 @@ describe('Products Page', () => {
 
     cy.get('[data-cy=name-input]').clear();
 
-    cy.get('.q-dialog').within(() => {
-      cy.get('.q-gutter-md')
+    cy.get('[data-cy=create-popup]').within(() => {
+      cy.get('[data-cy=selectable-components]')
         .children()
-        .get('.q-card')
+        .get('[data-cy=general-card]')
         .eq(mockID - 1)
         .click();
     });
 
     cy.get('[data-cy=create-button]').should('not.be.enabled');
   });
-
-  /*it('Product cannot be created if name is missing / components are not selected', () => {
-    cy.visit('/products/create');
-    cy.intercept('GET', '/products*', {
-      statusCode: 200,
-      body: {
-        mockProducts,
-      },
-    });
-    cy.intercept('GET', '/components*', {
-      statusCode: 200,
-      body: {
-        mockComponents,
-      },
-    });
-    cy.intercept('POST', '/products/create', {
-      statusCode: 200,
-      body: {
-        name: 'MOCK',
-        components: mockComponents,
-      },
-    });
-    cy.visit('/products/create');
-    //check if New Product Created pop up came
-  });*/
-});
-/*
-describe('Products Page', () => {
-  it('Get all products', () => {
-    cy.intercept('GET', '/products*', {
-      statusCode: 200,
-      body: {
-        mockProducts,
-      },
-    });
-    cy.visit('/products');
-    //cy.get('list').length == mockProducts.length;
-  });
-  it('Get one product', () => {
-    cy.intercept('GET', '/products*', {
-      statusCode: 200,
-      body: {
-        mockProducts,
-      },
-    });
-    cy.intercept('GET', '/products/*', {
-      statusCode: 200,
-      body: {
-        mockProduct,
-      },
-    });
-    cy.visit('/products');
-    //cy.get('general-card').click(); //OR cy.visit(`/components/${id}`);
-    //cy.get('general-card').name === ...;
-  });
 });
 
-describe('Product Creation', () => {
-  it('Create a product', () => {
-    cy.visit('/products/create');
-    cy.intercept('GET', '/products*', {
-      statusCode: 200,
-      body: {
-        mockProducts,
-      },
-    });
-    cy.intercept('GET', '/components*', {
-      statusCode: 200,
-      body: {
-        mockComponents,
-      },
-    });
-    cy.intercept('POST', '/products/create', {
-      statusCode: 200,
-      body: {
-        name: 'MOCK',
-        components: mockComponents,
-      },
-    });
-    cy.visit('/products/create');
-    //check if New Product Created pop up came
+describe('Main Menu', () => {
+  beforeEach(() => {
+    cy.visit('/');
+    pageIsVisible();
   });
-});*/
+  it('Switching currencies attempts to reload the products correctly', () => {
+    cy.intercept('GET', `${api}/products?currency=${defaultCurrency}`, {
+      statusCode: 200,
+      body: mockProducts,
+    });
 
-//TODO products page, switch currencies, about page
+    cy.get('[data-cy=currency-switch]').click();
+    cy.get('[data-cy=currency-item]').should('be.visible');
 
-// ** The following code is an example to show you how to write some tests for your home page **
-//
-//  describe('Landing', () => {
-//    beforeEach(() => {
-//      cy.visit('/');
-//    });
-//    it('.should() - assert that <title> is correct', () => {
-//      cy.title().should('include', 'Quasar');
-//      cy.get('li').first().click();
-//      cy.contains('Clicks on todos: 1').should('exist');
-//    });
-//  });
-//
-// describe('Home page tests', () => {
-//   beforeEach(() => {
-//     cy.visit('/');
-//   });
-//   it('has pretty background', () => {
-//     cy.dataCy('landing-wrapper')
-//       .should('have.css', 'background')
-//       .and('match', /(".+(\/img\/background).+\.png)/);
-//   });
-//   it('has pretty logo', () => {
-//     cy.dataCy('landing-wrapper img')
-//       .should('have.class', 'logo-main')
-//       .and('have.attr', 'src')
-//       .and('match', /^(data:image\/svg\+xml).+/);
-//   });
-//   it('has very important information', () => {
-//     cy.dataCy('instruction-wrapper')
-//       .should('contain', 'SETUP INSTRUCTIONS')
-//       .and('contain', 'Configure Authentication')
-//       .and('contain', 'Database Configuration and CRUD operations')
-//       .and('contain', 'Continuous Integration & Continuous Deployment CI/CD');
-//   });
-// });
+    const currencyToBeSelected =
+      predefinedCurrencies[predefinedCurrencies.length - 1]; // last selectable currency
+    cy.intercept('GET', `${api}/products?currency=${currencyToBeSelected}`, {
+      statusCode: 200,
+      body: mockProducts,
+    }).as('fetchProducts');
+
+    cy.get('[data-cy=currency-item]').last().click(); // last selectable currency
+
+    cy.wait('@fetchProducts').then((interception) => {
+      expect(interception.request.url).to.include(currencyToBeSelected);
+    });
+  });
+});
 
 // Workaround for Cypress AE + TS + Vite
 // See: https://github.com/quasarframework/quasar-testing/issues/262#issuecomment-1154127497

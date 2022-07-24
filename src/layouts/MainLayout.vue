@@ -25,6 +25,7 @@
           @click="toggleDarkMode"
         />
         <q-btn-dropdown
+          data-cy="currency-switch"
           class="text-white q-ma-sm"
           flat
           style="
@@ -36,6 +37,7 @@
         >
           <q-list>
             <q-item
+              data-cy="currency-item"
               v-for="currency in currencies"
               :key="currency.at"
               clickable
