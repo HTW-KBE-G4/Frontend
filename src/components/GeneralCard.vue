@@ -1,9 +1,5 @@
 <template>
-  <q-card
-    v-ripple.early.center="{ color: 'blue' }"
-    inset-shadow-down
-    class="general-card"
-  >
+  <q-card data-cy="general-card" inset-shadow-down class="general-card">
     <q-img no-spinner width="22vh" height="22vh" :src="imageUrl" />
     <q-card-section
       class="general-name row justify-center items-center text-center"

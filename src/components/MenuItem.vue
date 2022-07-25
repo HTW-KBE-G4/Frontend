@@ -3,7 +3,7 @@
     class="menu-item"
     clickable
     active-class="menu-item-active"
-    :to="path"
+    :active="isActive"
   >
     <q-item-section v-if="icon" avatar>
       <q-icon :name="icon" />
@@ -33,12 +33,22 @@ export default defineComponent({
       default: '',
     },
   },
+  computed: {
+    isActive() {
+      return this.$router.currentRoute.value.fullPath
+        ?.toString()
+        .startsWith(this.path);
+    },
+    isRegularPath() {
+      return this.$route.name !== this.path;
+    },
+  },
 });
 </script>
 
 <style lang="scss">
 .menu-item {
-  border-radius: 14px;
+  border-radius: 15px;
   margin-top: 2%;
 }
 .menu-item-active {

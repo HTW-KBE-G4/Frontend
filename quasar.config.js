@@ -27,7 +27,7 @@ module.exports = configure(function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['axios', 'keycloak'],
+    boot: process.env.NODE_ENV === 'test' ? ['axios'] : ['axios', 'keycloak'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ['app.scss'],
@@ -92,15 +92,15 @@ module.exports = configure(function (ctx) {
           : 8000,
       proxy: 'http://localhost:80',
       open: true, // opens browser window automatically
-      before (app) {
-        const cors = require('cors')
-      
-        app.options('*',cors())
-        app.use(cors())
+      before(app) {
+        const cors = require('cors');
+
+        app.options('*', cors());
+        app.use(cors());
       },
       headers: {
         'Access-Control-Allow-Origin': '*',
-      }
+      },
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework

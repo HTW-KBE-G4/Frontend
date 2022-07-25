@@ -19,18 +19,18 @@ const routes: RouteRecordRaw[] = [
         component: ProductsPage,
         children: [
           {
-            path: ':product_id',
-            component: DetailedProduct,
-            children: [
-              {
-                path: 'components/:component_id',
-                component: DetailedComponent,
-              },
-            ],
-          },
-          {
             path: 'create',
             component: CreateProductDialog,
+          },
+        ],
+      },
+      {
+        path: 'products/:product_id',
+        component: DetailedProduct,
+        children: [
+          {
+            path: 'components/:component_id',
+            component: DetailedComponent,
           },
         ],
       },

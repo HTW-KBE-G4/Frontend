@@ -1,12 +1,12 @@
 <template>
-  <q-dialog position="right" v-model="show" seamless persistent>
+  <q-dialog data-cy="create-popup" v-model="show" persistent>
     <q-card style="max-width: 75vh; min-height: 20vh; min-width: 50vh">
       <q-toolbar class="bg-accent text-white">
         <q-item-label class="text-h6 absolute-center"
           >Create a Product</q-item-label
         >
         <q-space />
-        <q-btn dense flat icon="close" @click="$router.push('/products')" />
+        <q-btn rounded flat icon="close" @click="$router.push('/products')" />
       </q-toolbar>
       <q-card-section
         class="q-mt-md"
@@ -15,9 +15,13 @@
         <div v-if="selectableComponents.length === 0 && !loadingComponents">
           No hardware components available 😢
         </div>
-        <div v-else>Select hardware components:</div>
+        <div class="q-mb-md" v-else>Select hardware components:</div>
       </q-card-section>
-      <q-card-section class="q-gutter-md row scroll" style="max-height: 50vh">
+      <q-card-section
+        data-cy="selectable-components"
+        class="q-gutter-md row scroll"
+        style="max-height: 50vh"
+      >
         <GeneralCard
           v-for="selectable in selectableComponents"
           :key="selectable.component.component_id"
@@ -34,10 +38,18 @@
       </q-card-section>
       <q-separator></q-separator>
       <q-card-section>
-        <q-input outlined v-model="nameInput" label="Add a name..." />
+        <q-input
+          data-cy="name-input"
+          color="primary"
+          stack-label
+          outlined
+          v-model="nameInput"
+          label="Add a name..."
+        />
       </q-card-section>
       <q-card-actions class="q-ma-sm" align="right">
         <q-btn
+          data-cy="create-button"
           :disable="selectedComponents.length <= 0 || nameInput.length <= 0"
           :loading="loadingCreate"
           icon-right="add"

@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <div class="q-ma-sm q-gutter-md row">
+    <div data-cy="product-gutter" class="q-ma-sm q-gutter-md row">
       <GeneralCard
         v-for="product in products"
         :key="product.product_id"

@@ -1,0 +1,20 @@
+{
+  "baseUrl": "http://localhost:9000",
+  "fixturesFolder": "test/cypress/fixtures",
+  "integrationFolder": "test/cypress/integration",
+  "pluginsFile": "test/cypress/plugins/index.ts",
+  "screenshotsFolder": "test/cypress/screenshots",
+  "supportFile": "test/cypress/support/index.ts",
+  "videosFolder": "test/cypress/videos",
+  "video": true,
+  "component": {
+    "componentFolder": "src",
+    "testFiles": "**/*.spec.ts",
+    "supportFile": "test/cypress/support/component.ts"
+  },
+  "env": {
+    "auth_base_url": "https://auth.server/auth",
+    "auth_realm": "my_realm",
+    "auth_client_id": "my_client_id"
+  }
+}
