@@ -12,7 +12,7 @@ export interface HardwareComponent {
   weight: number;
   productName: string;
   ean: number;
-  imageUrl: string;
+  imageURL: string;
 }
 
 export const useComponentStore = defineStore('components', {
@@ -40,6 +40,7 @@ export const useComponentStore = defineStore('components', {
         this.$patch({
           loadedCurrency: currency,
         });
+
         return response.data as HardwareComponent;
       }
     },

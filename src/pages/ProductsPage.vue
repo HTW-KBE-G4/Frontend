@@ -5,7 +5,7 @@
         v-for="product in products"
         :key="product.product_id"
         :name="product.name"
-        :image-url="product.image_url"
+        :imageURL="product.image_url"
         :price="product.uvp"
         @click="showDetails(product.product_id)"
       ></GeneralCard>
