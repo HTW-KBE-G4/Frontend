@@ -217,6 +217,48 @@ describe('Main Menu', () => {
   });
 });
 
+describe('Negative testing', () => {
+  it('Visiting the products page should result in an error notification if the API is not reachable', () => {
+    cy.visit('/products');
+    cy.get('.q-notification').should('have.class', 'bg-negative'); // -> products couldn't be loaded
+  });
+  it('Visiting the components page should result in an error notification if the API is not reachable', () => {
+    cy.visit('/components');
+    cy.get('.q-notification').should('have.class', 'bg-negative'); // -> components couldn't be loaded
+  });
+  it('Visiting a product page that does not exist should result in an error notification and push back to /products', () => {
+    cy.visit('/products/1');
+    cy.get('.q-notification').should('have.class', 'bg-negative'); // -> product couldn't be loaded
+    cy.location('pathname').should('eq', '/products');
+  });
+  it('Trying to display a component that does not exist should result in an error notification and push back to /components', () => {
+    cy.visit('/components/1');
+    cy.get('.q-notification').should('have.class', 'bg-negative'); // -> component couldn't be loaded
+    cy.location('pathname').should('eq', '/components');
+  });
+  it('Trying to create a product without the API being reachable should result in an error notification', () => {
+    cy.intercept('GET', `${api}/products*`, {
+      statusCode: 200,
+      body: mockProducts,
+    });
+    cy.intercept('GET', `${api}/components*`, {
+      statusCode: 200,
+      body: mockComponents,
+    });
+    cy.visit('/products/create');
+    cy.get('[data-cy=create-popup]').within(() => {
+      cy.get('[data-cy=selectable-components]')
+        .children()
+        .get('[data-cy=general-card]')
+        .eq(mockID - 1)
+        .click();
+      cy.get('[data-cy=name-input]').type('MOCK');
+    });
+    cy.get('[data-cy=create-button]').click();
+    cy.get('.q-notification').should('have.class', 'bg-negative'); // -> product couldn't be created
+  });
+});
+
 // Workaround for Cypress AE + TS + Vite
 // See: https://github.com/quasarframework/quasar-testing/issues/262#issuecomment-1154127497
 export {};

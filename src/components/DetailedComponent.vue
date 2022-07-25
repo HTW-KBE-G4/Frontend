@@ -95,7 +95,7 @@ export default defineComponent({
       );
     } catch (error) {
       displayNotification('Hardware Component does not exist', true);
-      router.back();
+      router.push('/components');
     }
 
     const formattedPrice = computed<string>(() =>
