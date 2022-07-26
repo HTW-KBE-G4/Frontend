@@ -11,15 +11,34 @@ npm install
 ### Create an .env file and change the API and PORT variables to your desired API endpoint and port the app should run on
 
 ```
-See .env.example in the root directory
+-> See .env.example in the root directory
 ```
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
 
 ```
 quasar dev
-or
+```
+
+OR
+
+```
 npx quasar dev
+```
+
+# Testing
+
+### Run Cypress integration tests with following commands
+
+```
+quasar test --e2e Cypress
+```
+
+OR
+
+```
+npx cypress verify
+npx quasar test --e2e Cypress
 ```
 
 # For production only
@@ -40,7 +59,11 @@ npm run format
 
 ```
 quasar build
-or
+```
+
+OR
+
+```
 npx quasar build
 ```
 
