@@ -21,7 +21,7 @@ const mockComponent: HardwareComponent = {
   weight: 99,
   productName: 'MOCK',
   ean: 99,
-  imageUrl: 'MOCK',
+  imageURL: 'MOCK',
 };
 
 const mockComponents: HardwareComponent[] = new Array(10).fill(mockComponent);
@@ -46,6 +46,7 @@ function pageIsVisible() {
 describe('Page Loads', () => {
   beforeEach(() => {
     cy.visit('/');
+    cy.wait(10000);
     pageIsVisible();
   });
   it('Assert that <title> is correct', () => {

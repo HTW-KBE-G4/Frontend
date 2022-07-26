@@ -35,7 +35,7 @@
               v-for="component in product.components"
               :key="component.component_id"
               :name="component.productName"
-              :image-url="component.imageUrl"
+              :image-u-r-l="component.imageURL"
               :price="component.uvp"
               @click="showDetails(product!.product_id, component.component_id)"
             ></GeneralCard>

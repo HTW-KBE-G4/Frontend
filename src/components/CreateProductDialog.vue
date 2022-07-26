@@ -26,7 +26,7 @@
           v-for="selectable in selectableComponents"
           :key="selectable.component.component_id"
           :name="selectable.component.productName"
-          :image-url="selectable.component.imageUrl"
+          :image-u-r-l="selectable.component.imageURL"
           :price="selectable.component.uvp"
           v-bind:style="selectable.selected ? styleSelected : styleUnselcted"
           @click="select(selectable)"

@@ -16,7 +16,7 @@
         <q-btn rounded flat icon="arrow_back" @click="$router.back()" />
       </q-toolbar>
       <q-card-section>
-        <q-img no-spinner width="50vh" :src="component.imageUrl"></q-img>
+        <q-img no-spinner width="50vh" :src="component.imageURL"></q-img>
       </q-card-section>
       <q-card-section class="text-center">
         <a class="text-h4">

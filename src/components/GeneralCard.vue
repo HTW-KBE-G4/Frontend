@@ -1,6 +1,6 @@
 <template>
   <q-card data-cy="general-card" inset-shadow-down class="general-card">
-    <q-img no-spinner width="22vh" height="22vh" :src="imageUrl" />
+    <q-img no-spinner width="22vh" height="22vh" :src="imageURL" />
     <q-card-section
       class="general-name row justify-center items-center text-center"
       >{{ name }}</q-card-section
@@ -26,7 +26,7 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    imageUrl: {
+    imageURL: {
       type: String,
       required: true,
     },
